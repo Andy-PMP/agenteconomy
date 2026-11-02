@@ -13,7 +13,7 @@ A live economy of AI agents trading creatures on a hand-built blockchain, run on
 ## Phases
 - [x] **P0 Setup:** repo, environment, tooling, this checklist.
 - [x] **P1 Chain:** blocks, transactions, signatures, proof of work, Merkle roots, mempool. Fully tested.
-- [ ] **P2 Nodes and consensus:** 3 simulated nodes, messaging, consensus, fork handling.
+- [x] **P2 Nodes and consensus:** 3 simulated nodes, messaging, consensus, fork handling.
 - [ ] **P3 Economy:** currency, mining, hatching from the assets, direct offers, fees, shocks. Run with scripted agents.
 - [ ] **P4 AI agents:** roster, tools, memory, limits, logging, reproducibility.
 - [ ] **P5 Messaging and security:** agent messages, injection defenses, the scammer's attempts, measurement.
@@ -49,6 +49,23 @@ Reasons are in `docs/WRITEUP.md`.
 - **Mining:** `mine()` takes `max_attempts`, for P3's equal budgets. Measured about 1.25M hashes/s on the dev machine, so 20 bits is about 0.8s per block and 24 bits about 13s. Single-threaded, and Fargate will differ.
 - **For P2:** `validate_chain`, `validate_block`, `cumulative_work`, `Mempool.on_new_tip`, `Mempool.readd_after_reorg`. `apply_block` and `validate_block` return a new state, so keeping state per branch is safe. Timestamps only have to be no earlier than the parent; P2 decides any limit on future timestamps.
 - **For P3:** `min_fee` and `block_reward` are placeholders in `ChainParams`. Reward is flat, so P3 decides how supply stays under control. Seasons may add agents after genesis, and there's currently no way to fund one except by transfer or mining.
+
+## Nodes (P2)
+`backend/agenteconomy/network/`. Start with `Cluster` in `settle.py`.
+- **Determinism:** no wall clock, threads or iteration over sets. Time is integer simulated milliseconds. Get randomness only from `sim.rng(purpose)`, one stream per purpose. `tests/network/test_real_forks.py` compares runs across processes with different `PYTHONHASHSEED`.
+- **Settle tie-break:** lowest block hash, in `Node.resolve_tie`, settle only. During the day, first seen stays.
+- **Checkpoints:** a settled tip can't be forked below (`below_checkpoint`), so published days stay true. `finalize()` drops side branches and old saved states, so memory holds only the tip's state.
+- **Validation order in `Node._on_block` matters.** Cheap checks (difficulty, proof of work, Merkle root) are never remembered. Only a block whose transactions match its header may enter `_invalid`; otherwise a swapped-transaction attack gets an honest block refused forever.
+- **Penalties:** only for things no honest node would do. Stale or unaffordable transactions aren't penalized, since nodes see different states in normal operation. Node-policy codes in `errors.py` aren't chain rules, so don't add them to `verify_vectors.mjs`.
+- **Measured orphan rates** (3 miners, one per node, 60 simulated seconds, 5 seeds; latency is uniform from 20ms to the max):
+
+| Per-miner block rate | Max 50ms | Max 200ms | Max 800ms | Max 3000ms |
+|---|---|---|---|---|
+| 1 per 3s | 0.8% | 8.1% | 16.0% | 39.0% |
+| 1 per 1s | 6.1% | 13.7% | 31.6% | 52.7% |
+| 4 per 1s | 18.8% | 37.2% | 53.0% | 62.4% |
+
+- **For P3:** agents act through `node.submit_tx` and `node.mine(miner, max_attempts)`, which continues its nonce search between calls. Schedule agent turns with `sim.schedule`. `Node.mine` takes no simulated time by itself, so the orchestrator must advance the clock. Choosing latency and hash budget sets how many forks the newspaper gets. Add creatures to `State` carefully: `State.copy` runs per block and states are kept per unsettled block. `SettleResult.pending` holds unmined transactions; P3 or P6 decides whether they carry over. `EventLog` entries are what P6 exports.
 
 ## Assets
 Raw files go in `assets/source/` (gitignored); see `assets/source/README.md`. Only processed images the site needs get published. `tests/test_repo_hygiene.py` fails if raw files are tracked.

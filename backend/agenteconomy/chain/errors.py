@@ -40,6 +40,13 @@ class Code(StrEnum):
     MEMPOOL_FULL = "mempool_full"
     SENDER_LIMIT = "sender_limit"
 
+    # Node policy, not chain rules: a browser replaying a chain never reports these
+    FUTURE_TIMESTAMP = "future_timestamp"
+    BELOW_CHECKPOINT = "below_checkpoint"
+    INVALID_PARENT = "invalid_parent"
+    KNOWN_INVALID = "known_invalid"
+    DAY_CLOSED = "day_closed"
+
 
 class ChainError(Exception):
     """The chain refused something. `code` is stable; `detail` is for people."""

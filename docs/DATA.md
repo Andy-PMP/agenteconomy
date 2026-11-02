@@ -22,6 +22,7 @@ data/days/2026-11-02/agents.json
 
 - **Start from `index.json`.** A day exists only once it's listed there. The index is written last, so a failed run never exposes a partial day.
 - **Day files don't change** once published. Only `index.json` updates, so day files can be cached indefinitely.
+- **Files hold only the settled chain.** Nodes can disagree during a day, but `blocks.jsonl` contains only the chain they all agreed on at the end of it. Blocks that lost a fork and reorgs are reported as events in `events.jsonl`, not as chain data.
 - **Free text is never on-chain.** Messages and rationales live in `events.jsonl`, and they appear only after passing the content filter. A blocked item keeps its place as a placeholder with the text's hash; the text itself isn't published.
 
 ## Block
@@ -92,6 +93,6 @@ These are the exact rules. `testdata/chain_vectors_v1.json` has worked examples,
 
 Applying a `transfer` subtracts `amount + fee` from the sender, adds `amount` to the recipient, adds 1 to the sender's count, and burns `fee`. Across the whole chain, balances always add up to minted minus burned.
 
-**Rejection codes.** Each failure has a stable code, such as `bad_nonce` or `insufficient_balance`, listed in `backend/agenteconomy/chain/errors.py`.
+**Rejection codes.** Each failure has a stable code, such as `bad_nonce` or `insufficient_balance`, listed in `backend/agenteconomy/chain/errors.py`. Codes under "Node policy" there, such as `below_checkpoint`, only apply to a live node. A verifier replaying a published chain never reports them, because they depend on a node's clock or what it has already settled.
 
 **Strict parsing.** `JSON.parse` can't tell `1.0` from `1`, or see duplicate keys, but the Python loader refuses both. That doesn't affect verification, because hashes are computed over the re-encoded canonical form.

@@ -70,6 +70,9 @@ class Mempool:
                 heapq.heappush(heap, _priority(following))
         return chosen
 
+    def waiting(self) -> list[Transaction]:
+        return [tx for waiting in self._by_sender.values() for tx in waiting.values()]
+
     def remove(self, tx: Transaction) -> None:
         waiting = self._by_sender.get(tx.sender, {})
         if waiting.get(tx.nonce) == tx:
