@@ -1,3 +1,5 @@
 * text=auto
 # sh can't run a hook with CRLF line endings
 .githooks/* text eol=lf
+# Tests compare these byte for byte
+testdata/* text eol=lf

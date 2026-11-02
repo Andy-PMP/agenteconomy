@@ -1,0 +1,6181 @@
+{
+ "blocks": [
+  {
+   "hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+   "header": {
+    "difficulty_bits": 8,
+    "height": 0,
+    "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+    "nonce": 0,
+    "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "timestamp": 100,
+    "version": 1
+   }
+  },
+  {
+   "hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+   "header": {
+    "difficulty_bits": 8,
+    "height": 1,
+    "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+    "nonce": 528,
+    "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+    "timestamp": 110,
+    "version": 1
+   }
+  },
+  {
+   "hash": "0063c6e579395e8234ee01e2ad33e030e2ca853885c225c4587485062509d350",
+   "header": {
+    "difficulty_bits": 8,
+    "height": 2,
+    "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+    "nonce": 18,
+    "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+    "timestamp": 120,
+    "version": 1
+   }
+  }
+ ],
+ "canonical": {
+  "reject": [
+   {
+    "input": 1.5,
+    "name": "float"
+   },
+   {
+    "input": 9007199254740992,
+    "name": "integer above the safe range"
+   },
+   {
+    "input": -9007199254740992,
+    "name": "integer below the safe range"
+   },
+   {
+    "input": {
+     "a": [
+      1.5
+     ]
+    },
+    "name": "nested float"
+   },
+   {
+    "input": "\ud800",
+    "name": "lone surrogate in a string"
+   },
+   {
+    "input": {
+     "\udc00": 1
+    },
+    "name": "lone surrogate in a key"
+   }
+  ],
+  "valid": [
+   {
+    "canonical": "null",
+    "input": null,
+    "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+   },
+   {
+    "canonical": "true",
+    "input": true,
+    "sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+   },
+   {
+    "canonical": "false",
+    "input": false,
+    "sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+   },
+   {
+    "canonical": "0",
+    "input": 0,
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+   },
+   {
+    "canonical": "-1",
+    "input": -1,
+    "sha256": "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464"
+   },
+   {
+    "canonical": "9007199254740991",
+    "input": 9007199254740991,
+    "sha256": "f40b423c2dd95ff2b2f027e22208f438cf7242862e5e746860e697308c9add26"
+   },
+   {
+    "canonical": "-9007199254740991",
+    "input": -9007199254740991,
+    "sha256": "4c933a456bb8f2e9894b2d0b26480439cd72d52fb8a27cbf8fd7f323f22c7815"
+   },
+   {
+    "canonical": "\"\"",
+    "input": "",
+    "sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+   },
+   {
+    "canonical": "[]",
+    "input": [],
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+   },
+   {
+    "canonical": "{}",
+    "input": {},
+    "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+   },
+   {
+    "canonical": "\"quote \\\" backslash \\\\ newline \\n tab \\t backspace \\b formfeed \\f return \\r\"",
+    "input": "quote \" backslash \\ newline \n tab \t backspace \b formfeed \f return \r",
+    "sha256": "3d5ba2833aff77f9d01f6cfaf355020e8af7f9dd154f23c0adadf3730e9c4793"
+   },
+   {
+    "canonical": "\"control \\u0000 \\u001f delete \u007f line separator \u2028\"",
+    "input": "control \u0000 \u001f delete \u007f line separator \u2028",
+    "sha256": "0d0f339da61118c3c7ad4db30e0cf36c1bc6a4a04c9c0dbc6f5ad48714fc0fb1"
+   },
+   {
+    "canonical": "\"\u00e9 \u20ac \ud83d\ude00\"",
+    "input": "\u00e9 \u20ac \ud83d\ude00",
+    "sha256": "44632e655288c5e4cc7ea9087a9daed6489f0e372193807628ca579f0273767c"
+   },
+   {
+    "canonical": "{\"a\":\"x\",\"b\":[1,{\"c\":true,\"d\":null}]}",
+    "input": {
+     "a": "x",
+     "b": [
+      1,
+      {
+       "c": true,
+       "d": null
+      }
+     ]
+    },
+    "sha256": "063f1587acec8e6af9d1e89abbbc89ea9c84f056a2ababeaa3fa03417c7f7e9a"
+   },
+   {
+    "canonical": "{\"\\r\":2,\"1\":4,\"\u0080\":6,\"\u00f6\":7,\"\u20ac\":1,\"\ud83d\ude00\":5,\"\ufb33\":3}",
+    "input": {
+     "\r": 2,
+     "1": 4,
+     "\u0080": 6,
+     "\u00f6": 7,
+     "\u20ac": 1,
+     "\ufb33": 3,
+     "\ud83d\ude00": 5
+    },
+    "sha256": "0d922ac8e15a6d17d5d50fab064983e86009ebae7b5998cbfc4ed172e6ff74a9"
+   }
+  ]
+ },
+ "chain": {
+  "blocks": [
+   {
+    "header": {
+     "difficulty_bits": 8,
+     "height": 0,
+     "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+     "nonce": 0,
+     "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+     "timestamp": 100,
+     "version": 1
+    },
+    "txs": [
+     {
+      "body": {
+       "amount": 1000,
+       "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 0,
+      "kind": "genesis",
+      "nonce": 0,
+      "sender": null,
+      "signature": null,
+      "version": 1
+     },
+     {
+      "body": {
+       "amount": 500,
+       "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 0,
+      "kind": "genesis",
+      "nonce": 0,
+      "sender": null,
+      "signature": null,
+      "version": 1
+     }
+    ]
+   },
+   {
+    "header": {
+     "difficulty_bits": 8,
+     "height": 1,
+     "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+     "nonce": 528,
+     "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+     "timestamp": 110,
+     "version": 1
+    },
+    "txs": [
+     {
+      "body": {
+       "amount": 50,
+       "height": 1,
+       "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 0,
+      "kind": "coinbase",
+      "nonce": 0,
+      "sender": null,
+      "signature": null,
+      "version": 1
+     },
+     {
+      "body": {
+       "amount": 100,
+       "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 2,
+      "kind": "transfer",
+      "nonce": 0,
+      "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+      "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+      "version": 1
+     },
+     {
+      "body": {
+       "amount": 30,
+       "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 1,
+      "kind": "transfer",
+      "nonce": 0,
+      "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+      "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+      "version": 1
+     }
+    ]
+   },
+   {
+    "header": {
+     "difficulty_bits": 8,
+     "height": 2,
+     "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+     "nonce": 18,
+     "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+     "timestamp": 120,
+     "version": 1
+    },
+    "txs": [
+     {
+      "body": {
+       "amount": 50,
+       "height": 2,
+       "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 0,
+      "kind": "coinbase",
+      "nonce": 0,
+      "sender": null,
+      "signature": null,
+      "version": 1
+     },
+     {
+      "body": {
+       "amount": 10,
+       "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+      },
+      "chain_id": "vectors-v1",
+      "fee": 1,
+      "kind": "transfer",
+      "nonce": 1,
+      "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+      "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+      "version": 1
+     }
+    ]
+   }
+  ],
+  "final_state": {
+   "balances": {
+    "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573": 917,
+    "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6": 569,
+    "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88": 110
+   },
+   "burned": 4,
+   "minted": 1600,
+   "nonces": {
+    "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573": 2,
+    "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6": 1
+   }
+  },
+  "params": {
+   "block_reward": 50,
+   "chain_id": "vectors-v1",
+   "difficulty_bits": 8,
+   "genesis_allocations": [
+    [
+     "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+     1000
+    ],
+    [
+     "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+     500
+    ]
+   ],
+   "genesis_timestamp": 100,
+   "max_block_txs": 4,
+   "min_fee": 1
+  },
+  "tip": "0063c6e579395e8234ee01e2ad33e030e2ca853885c225c4587485062509d350"
+ },
+ "ed25519": {
+  "low_order_public_keys": [
+   "0000000000000000000000000000000000000000000000000000000000000000",
+   "0000000000000000000000000000000000000000000000000000000000000080",
+   "0100000000000000000000000000000000000000000000000000000000000000",
+   "0100000000000000000000000000000000000000000000000000000000000080",
+   "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05",
+   "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc85",
+   "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a",
+   "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac03fa",
+   "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  ],
+  "reject": [
+   {
+    "message": "",
+    "name": "S above the group order",
+    "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+    "signature": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901554c8c7872aa064e049dbb3013fbf29380d25bf5f0595bbe24655141438e7a101b"
+   },
+   {
+    "message": "",
+    "name": "flipped bit",
+    "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+    "signature": "e4564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"
+   },
+   {
+    "message": "00",
+    "name": "wrong message",
+    "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+    "signature": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"
+   }
+  ],
+  "valid": [
+   {
+    "message": "",
+    "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+    "seed": "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60",
+    "signature": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"
+   },
+   {
+    "message": "72",
+    "public_key": "3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c",
+    "seed": "4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb",
+    "signature": "92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00"
+   }
+  ]
+ },
+ "format": "agenteconomy chain vectors",
+ "merkle": [
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba"
+   ],
+   "proofs": [
+    []
+   ],
+   "root": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde",
+    "7f5f00f1199c45329d4e101bb8160f5c2d47998e87ec2520f7a8146250375a3d"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     },
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     },
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "be1c536abd92eca65d174df17402173f114af4ac7948573f9bd6865ff6d51d5f"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde",
+    "7f5f00f1199c45329d4e101bb8160f5c2d47998e87ec2520f7a8146250375a3d",
+    "b312f0af7ea65f889710717f15df1c25f4257597eb36c06675821e6b9eea45fa"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "0965fa4d4f9d7e8e87c1aa9b97bb4ba240073dcd01fa168530b303b7f305c845",
+      "side": "right"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "left"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde",
+    "7f5f00f1199c45329d4e101bb8160f5c2d47998e87ec2520f7a8146250375a3d",
+    "b312f0af7ea65f889710717f15df1c25f4257597eb36c06675821e6b9eea45fa",
+    "608b5cfa8e3731f12fb977aa149152867eb333b3f20ce9194519b03f8b4c772f"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "0965fa4d4f9d7e8e87c1aa9b97bb4ba240073dcd01fa168530b303b7f305c845",
+      "side": "right"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "left"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "a954f5e62d5c66da0d7ff72671f4d74a30fa21d74203af1f890efed8e45d68fa"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde",
+    "7f5f00f1199c45329d4e101bb8160f5c2d47998e87ec2520f7a8146250375a3d",
+    "b312f0af7ea65f889710717f15df1c25f4257597eb36c06675821e6b9eea45fa",
+    "608b5cfa8e3731f12fb977aa149152867eb333b3f20ce9194519b03f8b4c772f",
+    "cc7ff3eb6fcf9cba8ca799bedffc224f4aaabdb0aa321c56e2e210ded3e4ad67"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "0965fa4d4f9d7e8e87c1aa9b97bb4ba240073dcd01fa168530b303b7f305c845",
+      "side": "right"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "left"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "52e5082791232a6752417d43fee1c232f012efd3160fb29a04e48d7f00b1fa20",
+      "side": "right"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "left"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "c2a9679bca88f8f3b921dec5989dbfb33ea633c41aeaea2f8191ce0f1f591f4e"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde",
+    "7f5f00f1199c45329d4e101bb8160f5c2d47998e87ec2520f7a8146250375a3d",
+    "b312f0af7ea65f889710717f15df1c25f4257597eb36c06675821e6b9eea45fa",
+    "608b5cfa8e3731f12fb977aa149152867eb333b3f20ce9194519b03f8b4c772f",
+    "cc7ff3eb6fcf9cba8ca799bedffc224f4aaabdb0aa321c56e2e210ded3e4ad67",
+    "dd0ff3e48ec397506385d9aa7a5ed10f562bb4a163ed4964ee7f4b3d882c603d"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "dc4069096520d01b9987c3372c16538cbbb3698f60b8e8de0759dcd505e5293a",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "dc4069096520d01b9987c3372c16538cbbb3698f60b8e8de0759dcd505e5293a",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "0965fa4d4f9d7e8e87c1aa9b97bb4ba240073dcd01fa168530b303b7f305c845",
+      "side": "right"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "dc4069096520d01b9987c3372c16538cbbb3698f60b8e8de0759dcd505e5293a",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "left"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "dc4069096520d01b9987c3372c16538cbbb3698f60b8e8de0759dcd505e5293a",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "52e5082791232a6752417d43fee1c232f012efd3160fb29a04e48d7f00b1fa20",
+      "side": "right"
+     },
+     {
+      "hash": "7981b6f9c2a72fcdb68b00fe772d0c724fafb6170f3343df7310d4229884c564",
+      "side": "right"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "left"
+     },
+     {
+      "hash": "7981b6f9c2a72fcdb68b00fe772d0c724fafb6170f3343df7310d4229884c564",
+      "side": "right"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "left"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "8f0ae7fe0b8d4490aabb37134866fa40377ed018c0ac00598beed3800afe4847"
+  },
+  {
+   "items": [
+    "f5201cf555e7b13e0dc1d8c025407e0d2d96eb5728d49be67c29becdc1ee44ba",
+    "acadda60a86d56e836b3df33c0bd3205d7e0f0ffb12733b44866917582286cde",
+    "7f5f00f1199c45329d4e101bb8160f5c2d47998e87ec2520f7a8146250375a3d",
+    "b312f0af7ea65f889710717f15df1c25f4257597eb36c06675821e6b9eea45fa",
+    "608b5cfa8e3731f12fb977aa149152867eb333b3f20ce9194519b03f8b4c772f",
+    "cc7ff3eb6fcf9cba8ca799bedffc224f4aaabdb0aa321c56e2e210ded3e4ad67",
+    "dd0ff3e48ec397506385d9aa7a5ed10f562bb4a163ed4964ee7f4b3d882c603d",
+    "860b19ff06cdec8ef51ad68d1714bc7029489f6e17be3ef91c1194d2a80db10f"
+   ],
+   "proofs": [
+    [
+     {
+      "hash": "9f57b0e9ca8b1bfbce86a1decbc13cd2ffe794f38fabfa28f615b39813302985",
+      "side": "right"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "ce8bd4258adebd6b6fc37fda2597aa6739df31b84b895f67c193c02dee5f9c31",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "696044168f7d8402cf0b78d2b273b05f4d00a59910ece1ad0b6116c6fb7f9b9c",
+      "side": "left"
+     },
+     {
+      "hash": "4031a451d38cb2390abf48e6942cbd0904151bc2847e0d95cc78ee148a002708",
+      "side": "right"
+     },
+     {
+      "hash": "ce8bd4258adebd6b6fc37fda2597aa6739df31b84b895f67c193c02dee5f9c31",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "0965fa4d4f9d7e8e87c1aa9b97bb4ba240073dcd01fa168530b303b7f305c845",
+      "side": "right"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "ce8bd4258adebd6b6fc37fda2597aa6739df31b84b895f67c193c02dee5f9c31",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "7193d44ada385fc6ea8b209c00b975538710d19bc8aa725bece6081df29f152a",
+      "side": "left"
+     },
+     {
+      "hash": "5c4bb1a213cc264cac847f0f4cf5f3962774c1087a1f4ae2f333fd7e3791feb9",
+      "side": "left"
+     },
+     {
+      "hash": "ce8bd4258adebd6b6fc37fda2597aa6739df31b84b895f67c193c02dee5f9c31",
+      "side": "right"
+     }
+    ],
+    [
+     {
+      "hash": "52e5082791232a6752417d43fee1c232f012efd3160fb29a04e48d7f00b1fa20",
+      "side": "right"
+     },
+     {
+      "hash": "3a1d4a2ee79b9449b67d3640813fe3905ca9dd0684b935ca98a3418e14c00c08",
+      "side": "right"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "a23f2866ec2143d565b072413019a6c95defd693119da04880957af6d941ee84",
+      "side": "left"
+     },
+     {
+      "hash": "3a1d4a2ee79b9449b67d3640813fe3905ca9dd0684b935ca98a3418e14c00c08",
+      "side": "right"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "dca099630676ba979d045623715130d883de6035f97a5444bcfb65200f2056b3",
+      "side": "right"
+     },
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "left"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ],
+    [
+     {
+      "hash": "7981b6f9c2a72fcdb68b00fe772d0c724fafb6170f3343df7310d4229884c564",
+      "side": "left"
+     },
+     {
+      "hash": "644ae23d3da1f589ca65a7e5ec09ae275bd8207a837eb5286abac2e460c36e9d",
+      "side": "left"
+     },
+     {
+      "hash": "48164b72e03e766c1745dc41f6ff80316ded7eef611e754061e7a0695f111391",
+      "side": "left"
+     }
+    ]
+   ],
+   "root": "fb9d6d11f33952e1e9379191dcf83bded153f69743eb50c6a357ff527c457554"
+  }
+ ],
+ "notes": "All keys and seeds here are public test values. See docs/DATA.md for the rules.",
+ "proof_of_work": [
+  {
+   "bits": 255,
+   "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+   "meets": true,
+   "work": "57896044618658097711785492504343953926634992332820282019728792003956564819968"
+  },
+  {
+   "bits": 0,
+   "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+   "meets": true,
+   "work": "1"
+  },
+  {
+   "bits": 0,
+   "hash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "meets": true,
+   "work": "1"
+  },
+  {
+   "bits": 1,
+   "hash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "meets": false,
+   "work": "2"
+  },
+  {
+   "bits": 9,
+   "hash": "007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "meets": true,
+   "work": "512"
+  },
+  {
+   "bits": 10,
+   "hash": "007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "meets": false,
+   "work": "1024"
+  }
+ ],
+ "tagged_hash": [
+  {
+   "data": "616263",
+   "hash": "5af199fa29ccbfa763ac4cc6a2ebfc97e30b18ae7cd3675ae73ac6aa1a1901f5",
+   "tag": "agenteconomy/tx/v1"
+  }
+ ],
+ "tampered_chains": [
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 999999,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_genesis",
+   "name": "genesis allocation changed"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 2
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "unsupported_version",
+   "name": "unsupported block version"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 5,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_height",
+   "name": "wrong height"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "abababababababababababababababababababababababababababababababab",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_prev_hash",
+   "name": "previous hash changed"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 0,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_difficulty",
+   "name": "difficulty lowered"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 19,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_pow",
+   "name": "nonce changed, no proof of work"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 55,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 109,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_timestamp",
+   "name": "timestamp before parent"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "98e3abc7a34df0f1b5f6532a1f942974c4a6c97f66a48ef8a4e28270f533b7c9",
+      "nonce": 192,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "5f4538cb8402d6642380fb316b183b5a23b1876b7ef8bea814925ed69279f04cb4c5d334ed621a49c4b721c4237f2a1d7adbb0eba1d519f4eb77627c334af808",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 2,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "d1984ae30f815a5b14ed2446f08780ea9fbb8999f46e48b125460ee321efc997eb0191b0754f7cad8d9dbf9aef5d5c3598d8d8a1479318ff8c2309e68e45a500",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 3,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "5ed0a6857047ebafe67d624dc3550cfb046babd9565a7481cd1712ac97d0190d62c16470af356db67c7136cbf6bd276cbcd0737bdb791510dd990ca230e70600",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 4,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "a4d38f5047c2ced57ee718f2fc9299f76abfcfb1379cb71862a8759f87dfb262cfc83ffc2eede4a08d57ab675ccd6eea8f7ff50b27c40410658111bb22187a08",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "too_many_txs",
+   "name": "too many transactions"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 11,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_merkle_root",
+   "name": "transaction changed, Merkle root not updated"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": []
+    }
+   ],
+   "code": "bad_coinbase",
+   "name": "no transactions"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "66e795d4c257923afa9b9d940c3da1d79dbb4cc61ea1053ff02d092b2ee8cec3",
+      "nonce": 9,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_coinbase",
+   "name": "no coinbase"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "db96a369bfe9b4c514c488388cd4138eeb64aed12018af73f855946ddd683e38",
+      "nonce": 198,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 51,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_coinbase",
+   "name": "inflated coinbase"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "8e2b2fc7870bc100b1574ae242f44213bb57bada04447a098622a58f8ff6f801",
+      "nonce": 453,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 9,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_coinbase",
+   "name": "coinbase height wrong"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "b2a8f82079f087299abee31ea11e385c11d91f4ede656a85b32dd468541a802e",
+      "nonce": 447,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_coinbase",
+   "name": "second coinbase"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "0beb37db277d3bc03eb5756331fc0917fae88ed26068f0bd91a377fad8d6e699",
+      "nonce": 363,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "duplicate_tx",
+   "name": "same transaction twice"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "4919fe96691d7efa1a78e90513fe2064a5840f8e33800a7729bb63c30587aeba",
+      "nonce": 73,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 5,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "unexpected_kind",
+   "name": "genesis transaction in a later block"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "ef216c93088cd8d9aff65d8539b5a447d27ff8c9477d4b252b6502fe50687949",
+      "nonce": 56,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 11,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_signature",
+   "name": "amount changed after signing"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "ea0f8bf2d786694012ecce3ab1ebea577dca15ec85a97bc82dda571fa34a0989",
+      "nonce": 868,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "a0ec4dd0ab0437e6eb7eeb2e60b07fc672fa0f432663a826d163b2500da289bae1ca8aea631106698c37191202f49a1ed4372afafe72932c265bcf70bcc9b409",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_signature",
+   "name": "signature from someone else"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "b1a452fc214b204a80b1e1aa51a2b0900bf3822704094291a5bf8d80d4688a68",
+      "nonce": 187,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510430c5e97451809ddbe395accf6c29380c16aecea5b1157ccc23baab7a42cc011c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_signature",
+   "name": "S above the group order"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "e87c1ec4ca50b04f4a62f981d0e4e06b54307c2946845382b6c23797203c9a0f",
+      "nonce": 154,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "0100000000000000000000000000000000000000000000000000000000000000",
+       "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "invalid_public_key",
+   "name": "low-order sender with a forged signature"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "ac2cf4146fac5dc09c8e29f75728528c88355f767c9c0917e1598f30b82b970c",
+      "nonce": 321,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 1,
+        "to": "0100000000000000000000000000000000000000000000000000000000000000"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "cd1b109ced9ef5d8533dcd17d4296e2be72d896b226f6dea5797e008daa36023ca964a1701ce5fa7554d3a2001a6bed7031313c9ea0fe2d36daa5ca63f78750a",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "invalid_public_key",
+   "name": "low-order recipient"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "4ecab63d698d50c99688109081bee36fe0bff468df54f15251f796af91db2479",
+      "nonce": 275,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "other-chain",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "62929f20e9fb158d19de4ce3de2eb2605b92232cbec5a398c3a11c3411a1b2bf2b59a47a26b3de07df95b8f6b4ca1ffcf6180818e388536662a3c073c18ce10c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "wrong_chain",
+   "name": "signed for another chain"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "02685789ab56849159245baaba4fe40d5917411ca51d5bbf465a7f5b1db6541a",
+      "nonce": 8,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "a777f5acb6da633ef6acd41a74a5e025272ba41e29a2e93fe238f24c8bbed210401fa471f10c7c116cc262af8cab390fd6ff2a30b8c8a744fa41dfe4b9401e07",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "self_transfer",
+   "name": "pays itself"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "5fd9755408f64576737aa3b98411ff570c9c5ca18d3d6e2e9351333ad82d5ff1",
+      "nonce": 416,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 0,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "85ca8dd51fc4476ec0e7b50931fd1e10b86eb515ead2dd3eea6454e92676a00505b34e371c9f98040fde6c45a2c5d1f59b459bd32b7e48d3fd2aaeea30c47909",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "invalid_amount",
+   "name": "zero amount"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "ba83f6ca685fbb0e244966eca271bff2f15502759cf323267d16b3861847950d",
+      "nonce": 592,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": -5,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "3b676ae32435c8621ffacd0c1ee6376575c4c5feec6930b58e6daf13484649de8b57b8075a61e9c2350a7481c98999003b74ae0fab4f7c9a14a2123a0163f60e",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "invalid_amount",
+   "name": "negative amount"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "8c7d541a04de1eef849afce594191139d8be9ed71f1a5ad361cd1f754db177c3",
+      "nonce": 148,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "aecc18a5c4455a65876e303afcb90da3b1fcfe7b06d5f6117498ead426b556ab3382afd3961f4f7e5021c8ce2d1ed845adec38b1871569ba00ca4af7b367070d",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "fee_too_low",
+   "name": "fee under the minimum"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 3,
+      "merkle_root": "6f497c0639d5ac359cb9719afd00da0049915e4d41746385a28336eecdc8e934",
+      "nonce": 84,
+      "prev_hash": "0063c6e579395e8234ee01e2ad33e030e2ca853885c225c4587485062509d350",
+      "timestamp": 130,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 3,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_nonce",
+   "name": "replay of an earlier transaction"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "55c70e0caedd192889d99512acac4f846128581680f4728f2447919a6fed5215",
+      "nonce": 325,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "38c475115e319e426306fed349b5350cd9151b1c296f598bfbe6eca100bc0679f1ad3c5622e68e1f73bc95b0030fe67947b125662ef0e739e48f98745d15780f",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_nonce",
+   "name": "double spend in one block"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "35c1246398957315b91aaac70c0241f064c8e539dba1b0590c82e25a0ed9b4a6",
+      "nonce": 15,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 2,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "ac3961a7784e1806dac4c45c8dabcdcddb664817b42fbb80da22f4edcaf4b41d10158a06e1c9281dd2f3ed4d08cb4f96fb5a2da991f4e4cd1c2eb1056a0b3f00",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "bad_nonce",
+   "name": "skipped nonce"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "bf8b4f0248349ca504d4d07da75f86eae7168b4149a5dd103cd3fa7d76d75d6a",
+      "nonce": 358,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 1000000,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f275354945ce92b8ac7a697cc7d47250c85359d2d1b805b5a2d038f10a80edfce75713a447c581856a2a3e6ca636b31a23c9817a61f2a432ebb87b37194f510f",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "insufficient_balance",
+   "name": "spends more than the balance"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "63ee47c6e38d39c09464b90c3c0c899e7416178ec51546a548232650e0f4a970",
+      "nonce": 267,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 928,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "d86fef601a5a8a222eeaaeeb25a2df0995f325bff6d3e4a65393104cec5e23e43434e1095551a8b47ce81262fdf1513b9b60c6d3392c133a9cbd328ee32f3d08",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "insufficient_balance",
+   "name": "balance covers the amount but not the fee"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "memo": "hello",
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "malformed",
+   "name": "free text in a transfer"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1F9BB4EA4B9C7FB9EC6F4D078391C1AF444430C3B2EEE24C4C18117959DC510443F1F317371D8B830DF9B42C8E2F59F715AECEA5B1157CCC23BAAB7A42CC010C",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "malformed",
+   "name": "uppercase hex signature"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "extra": 1,
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "malformed",
+   "name": "unknown field"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "mint",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "unknown_kind",
+   "name": "unknown transaction kind"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 1,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 2
+      }
+     ]
+    }
+   ],
+   "code": "unsupported_version",
+   "name": "unsupported transaction version"
+  },
+  {
+   "blocks": [
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 0,
+      "merkle_root": "a3a1234d958e246ddb59026cee17d573cbedd58252e78519ddd689c36b2ce052",
+      "nonce": 0,
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "timestamp": 100,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 1000,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 500,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "genesis",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 1,
+      "merkle_root": "fd623aa8b414b3e305501645fa7162dc02fb0993afbf2cc3627a64de08e51384",
+      "nonce": 528,
+      "prev_hash": "6b54cf500aa875a9c87b2db4908be49c6f918b4012f8bbf29f5f680956f1d468",
+      "timestamp": 110,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 1,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 100,
+        "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 2,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 30,
+        "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": 0,
+       "sender": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6",
+       "signature": "cff46b7ba254029c8d7af7726af8b46c0e68ff7aae5656935ce6fb9a868fd39ce3997340504bbb3c249e3759e12eab008326cfd9d9be5b1dec45c05f6f796204",
+       "version": 1
+      }
+     ]
+    },
+    {
+     "header": {
+      "difficulty_bits": 8,
+      "height": 2,
+      "merkle_root": "7eebaaf92f5657a5a174c42e13b9d7239916ca9f8549c57b87c125a272894738",
+      "nonce": 18,
+      "prev_hash": "003b371f7b13e0d5e5f7bed53b54d8c246891cb4b26ecc8014c22f6127fe8573",
+      "timestamp": 120,
+      "version": 1
+     },
+     "txs": [
+      {
+       "body": {
+        "amount": 50,
+        "height": 2,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 0,
+       "kind": "coinbase",
+       "nonce": 0,
+       "sender": null,
+       "signature": null,
+       "version": 1
+      },
+      {
+       "body": {
+        "amount": 10,
+        "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+       },
+       "chain_id": "vectors-v1",
+       "fee": 1,
+       "kind": "transfer",
+       "nonce": true,
+       "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+       "signature": "1f9bb4ea4b9c7fb9ec6f4d078391c1af444430c3b2eee24c4c18117959dc510443f1f317371d8b830df9b42c8e2f59f715aecea5b1157ccc23baab7a42cc010c",
+       "version": 1
+      }
+     ]
+    }
+   ],
+   "code": "malformed",
+   "name": "true used as an integer"
+  }
+ ],
+ "transactions": [
+  {
+   "id": "67376cc809f7cc909a3bc11a4a81526a66d3127290703175772fcd5adcf6030f",
+   "signing_bytes": "6167656e7465636f6e6f6d792f74782d7369676e2f7631007b22626f6479223a7b22616d6f756e74223a3130302c22746f223a2235343665326665633034336264376630353930366335333830633565383339623564653935383130366330613739653931383862663665356465643066646536227d2c22636861696e5f6964223a22766563746f72732d7631222c22666565223a322c226b696e64223a227472616e73666572222c226e6f6e6365223a302c2273656e646572223a2230343133353263613934316538316466376136653837393335363866343564376431636163363331333838626236326537326531326465636463383632353733222c2276657273696f6e223a317d",
+   "tx": {
+    "body": {
+     "amount": 100,
+     "to": "546e2fec043bd7f05906c5380c5e839b5de958106c0a79e9188bf6e5ded0fde6"
+    },
+    "chain_id": "vectors-v1",
+    "fee": 2,
+    "kind": "transfer",
+    "nonce": 0,
+    "sender": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573",
+    "signature": "f6e7155b871818a25244172ee8df7e5bea154e1e7a956469e00f28a5c2e4b69de84548f5338a52d3f08dc0125bb7878eae2d111f96e9423aae5a1ade1f83600f",
+    "version": 1
+   }
+  },
+  {
+   "id": "dd5a4dcce4e348ed34bf2608ef19f94b7b5f37c53bedb754b641516b05af4913",
+   "signing_bytes": "6167656e7465636f6e6f6d792f74782d7369676e2f7631007b22626f6479223a7b22616d6f756e74223a35302c22686569676874223a312c22746f223a2239633963663037623262376236333765336561656663353035393035316131643564633164323866643564386161393039356236643364396635396663633838227d2c22636861696e5f6964223a22766563746f72732d7631222c22666565223a302c226b696e64223a22636f696e62617365222c226e6f6e6365223a302c2273656e646572223a6e756c6c2c2276657273696f6e223a317d",
+   "tx": {
+    "body": {
+     "amount": 50,
+     "height": 1,
+     "to": "9c9cf07b2b7b637e3eaefc5059051a1d5dc1d28fd5d8aa9095b6d3d9f59fcc88"
+    },
+    "chain_id": "vectors-v1",
+    "fee": 0,
+    "kind": "coinbase",
+    "nonce": 0,
+    "sender": null,
+    "signature": null,
+    "version": 1
+   }
+  },
+  {
+   "id": "9d6578180f8949901a7542e674c8609d7ce994ae7b63d353945998fb9b439aa0",
+   "signing_bytes": "6167656e7465636f6e6f6d792f74782d7369676e2f7631007b22626f6479223a7b22616d6f756e74223a313030302c22746f223a2230343133353263613934316538316466376136653837393335363866343564376431636163363331333838626236326537326531326465636463383632353733227d2c22636861696e5f6964223a22766563746f72732d7631222c22666565223a302c226b696e64223a2267656e65736973222c226e6f6e6365223a302c2273656e646572223a6e756c6c2c2276657273696f6e223a317d",
+   "tx": {
+    "body": {
+     "amount": 1000,
+     "to": "041352ca941e81df7a6e8793568f45d7d1cac631388bb62e72e12decdc862573"
+    },
+    "chain_id": "vectors-v1",
+    "fee": 0,
+    "kind": "genesis",
+    "nonce": 0,
+    "sender": null,
+    "signature": null,
+    "version": 1
+   }
+  }
+ ],
+ "version": 1
+}
