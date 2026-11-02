@@ -43,7 +43,7 @@ def random_attempt(rng: random.Random, state: State):
 def test_rules_hold_under_random_traffic(seed):
     rng = random.Random(seed)
     blocks = [make_genesis(PARAMS)]
-    state = apply_block(State(), blocks[0])
+    state = apply_block(State(), blocks[0], PARAMS)
     pool = Mempool(PARAMS)
     accepted = refused = included = 0
 
@@ -76,7 +76,7 @@ def test_same_seed_gives_the_same_chain():
     def run() -> str:
         rng = random.Random(7)
         blocks = [make_genesis(PARAMS)]
-        state = apply_block(State(), blocks[0])
+        state = apply_block(State(), blocks[0], PARAMS)
         pool = Mempool(PARAMS)
         for _ in range(10):
             for _ in range(5):
@@ -94,7 +94,7 @@ def test_same_seed_gives_the_same_chain():
 
 
 def test_no_transaction_can_mint_coins():
-    state = apply_block(State(), make_genesis(PARAMS))
+    state = apply_block(State(), make_genesis(PARAMS), PARAMS)
     mint = make_genesis_tx(PARAMS, to=ALICE.public_hex, amount=1)
     with pytest.raises(ChainError):
         Mempool(PARAMS).add(mint, state)

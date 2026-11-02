@@ -57,14 +57,49 @@ data/days/2026-11-02/agents.json
 | Kind | Body | Meaning |
 |---|---|---|
 | `transfer` | `to`, `amount` | Sender pays `to`. Sender's balance must cover `amount + fee` |
-| `coinbase` | `to`, `amount`, `height` | Block reward. Exactly one per mined block, always first. `amount` must equal the reward and `height` the block's height |
+| `offer` | `to`, `give_coins`, `give_creatures`, `want_coins`, `want_creatures`, `expires_at`, `counter_of` | Sender proposes a trade to `to`. Nothing is locked. `counter_of` is an open offer's ID, which this closes, or null |
+| `accept` | `offer_id` | The offer's recipient executes it, exactly as signed |
+| `reject` | `offer_id` | The recipient declines, or the proposer withdraws |
+| `coinbase` | `to`, `amount`, `height` | Block reward. Exactly one per mined block, always first. `amount` must equal the reward (it can be 0 at the supply cap) and `height` the block's height |
 | `genesis` | `to`, `amount` | Starting balance. Only in the genesis block |
 
-An address is the hex-encoded Ed25519 public key. All hex is lowercase. All integers are between -(2^53-1) and 2^53-1, and floats are not allowed anywhere. Unknown fields make a block or transaction invalid.
+An address is the hex-encoded Ed25519 public key. An offer ID is the `offer` transaction's ID. A creature ID is the hash of the block that hatched it. All hex is lowercase. All integers are between -(2^53-1) and 2^53-1, and floats are not allowed anywhere. Unknown fields make a block or transaction invalid. Every string in a body is a hash or an address, so transactions can't carry free text.
+
+**Offer terms.** Coins can only move one way. An offer must exchange something. Creature lists must be sorted with no repeats, within the limit, and no creature can be on both sides.
+
+## Chain parameters
+
+Published with the chain, because a verifier needs them. A chain without the economy settings is a plain coin chain: flat reward, no creatures.
+
+| Parameter | Meaning |
+|---|---|
+| `chain_id`, `difficulty_bits`, `genesis_allocations`, `genesis_timestamp` | The chain's identity and starting balances |
+| `block_reward`, `supply_cap` | See the reward rule below |
+| `min_fee`, `trade_fee_bps` | Minimum `fee` per transaction; share of an accepted trade's coins that gets burned, in 1/100ths of a percent |
+| `max_block_txs` | Per block, including the coinbase |
+| `seasons` | List of `{start_height, species}`: the pool mined blocks hatch from, starting at that height |
+| `max_offer_creatures`, `max_offer_ttl`, `max_open_offers` | Per side; in blocks; per sender |
+
+**Reward.** With no cap, it's `block_reward`. With one, where `room = supply_cap - supply` and supply is minted minus burned after the parent block: 0 if `room <= 0`, otherwise `min(room, max(1, floor(block_reward * room / supply_cap)))`.
+
+## Creatures
+
+A creature's attributes aren't stored anywhere on the chain. They're derived from the hash of the block that hatched it, so anyone can reproduce them, and a block that loses a fork takes its creature with it.
+
+`roll(label) = SHA-256("agenteconomy/hatch/v1" + 0x00 + block hash bytes + label)`, read as a big-endian integer. A choice from a table is `table[roll(label) mod length]`.
+
+| Attribute | How |
+|---|---|
+| `species` | Choice from the season's pool, label `species` |
+| `rarity` | `roll("rarity") mod 1000`, the first row of `rarities` whose limit is above it |
+| `arms`, `legs`, `eyes`, `eye_count`, `mouth`, `nose`, `detail`, `eyebrows` | Choice from each table, with the attribute's name as the label |
+| `attack`, `defense`, `speed`, `health` | Three dice: `roll(name + die) mod 33 + 1` for die 0 to 2, added up, plus the rarity's bonus, at most `max_stat` |
+
+The tables are `creature_tables` in `testdata/economy_vectors_v1.json`. A species is a colour and a body shape, like `blueA`.
 
 ## Verifying a chain
 
-These are the exact rules. `testdata/chain_vectors_v1.json` has worked examples, and `scripts/verify_vectors.mjs` is a complete, dependency-free implementation using the browser's WebCrypto API.
+These are the exact rules. `testdata/chain_vectors_v1.json` and `testdata/economy_vectors_v1.json` have worked examples, including a chain from a real simulation, and `scripts/verify_vectors.mjs` is a complete, dependency-free implementation using the browser's WebCrypto API.
 
 **Canonical JSON.** Everything hashed or signed is first encoded as a strict subset of RFC 8785: no whitespace, object keys sorted by UTF-16 code unit (JavaScript's default sort), strings encoded as `JSON.stringify` does, UTF-8 output, and lone surrogates refused.
 
@@ -89,9 +124,18 @@ These are the exact rules. `testdata/chain_vectors_v1.json` has worked examples,
 3. The block has transactions, and the Merkle root matches.
 4. The first transaction is a valid `coinbase` for the right reward and height.
 5. No transaction ID repeats.
-6. Apply the coinbase. Then, for each other transaction in order: it isn't a `coinbase` or `genesis`; `chain_id` matches; keys are usable; `amount` is positive; sender isn't the recipient; fee meets the minimum; signature is valid; `nonce` equals the sender's count so far; balance covers `amount + fee`.
+6. Move to the block's height: offers with `expires_at` at or below it close. Apply the coinbase.
+7. For each other transaction in order: it isn't a `coinbase` or `genesis`; `chain_id` matches; keys are usable; `amount`, if any, is positive; sender isn't the recipient; an offer's terms are valid; fee meets the minimum; signature is valid; `nonce` equals the sender's count so far; balance covers `amount + fee`. Then the kind's own checks, below.
+8. Hatch the block's creature for the coinbase's `to`, if a season has started. It can be traded from the next block.
 
-Applying a `transfer` subtracts `amount + fee` from the sender, adds `amount` to the recipient, adds 1 to the sender's count, and burns `fee`. Across the whole chain, balances always add up to minted minus burned.
+Every signed transaction adds 1 to the sender's count and burns `fee`. Then, by kind:
+
+- **`transfer`:** moves `amount` from sender to recipient.
+- **`offer`:** `expires_at` must be after the current height and at most `max_offer_ttl` above it. The sender must have fewer than `max_open_offers` open, and own everything in `give_creatures`. A `counter_of` must be open, addressed to the sender, and from this offer's `to`; it closes. The offer opens with its transaction ID as its ID.
+- **`accept`:** the offer must be open and addressed to the sender. The proposer must still own `give_creatures` and hold `give_coins`, and the sender must own `want_creatures` and hold `want_coins + fee`. The whole trade then happens at once, and `floor(coins * trade_fee_bps / 10000)` of any coins is burned from what the receiver gets.
+- **`reject`:** the offer must be open, and the sender must be its recipient or proposer. It closes.
+
+Across the whole chain, balances always add up to minted minus burned.
 
 **Rejection codes.** Each failure has a stable code, such as `bad_nonce` or `insufficient_balance`, listed in `backend/agenteconomy/chain/errors.py`. Codes under "Node policy" there, such as `below_checkpoint`, only apply to a live node. A verifier replaying a published chain never reports them, because they depend on a node's clock or what it has already settled.
 

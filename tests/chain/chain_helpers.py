@@ -18,7 +18,7 @@ PARAMS = ChainParams(
 
 
 def genesis_state() -> State:
-    return apply_block(State(), make_genesis(PARAMS))
+    return apply_block(State(), make_genesis(PARAMS), PARAMS)
 
 
 def pay(sender=ALICE, to=BOB, amount=10, *, nonce=0, fee=1, chain_id=PARAMS.chain_id) -> Transaction:

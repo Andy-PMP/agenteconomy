@@ -1,6 +1,6 @@
 # Raw assets
 
-Everything in this folder except this README is gitignored. Raw asset files must never be committed.
+Everything in this folder except this README is gitignored. Raw asset files must never be committed. `scripts/build_parts.py` turns them into the processed parts in `assets/parts/`, which are committed.
 
 ## What goes here
 

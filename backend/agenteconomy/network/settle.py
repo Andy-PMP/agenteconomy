@@ -8,7 +8,6 @@ from ..chain.errors import ChainError
 from ..chain.params import ChainParams
 from ..chain.state import State
 from ..chain.transaction import Transaction
-from ..chain.validation import validate_chain
 from .miner import MiningProcess
 from .network import EventLog, Network
 from .node import Node
@@ -83,11 +82,15 @@ def _agree_on_tip(sim: Simulator, nodes: Sequence[Node], max_rounds: int) -> int
 
 
 def _check_replays_agree(nodes: Sequence[Node], log: EventLog) -> State:
-    """Agreeing on a hash should mean agreeing on everything. Prove it from the blocks, node by node."""
+    """Agreeing on a hash should mean agreeing on everything. Prove it from the blocks, node by node.
+
+    Each node replays from its last checkpoint, which an earlier settle proved the same way. Loading a chain from disk
+    replays it from genesis.
+    """
     states = []
     for node in nodes:
         try:
-            state = validate_chain(node.main_chain(), node.params)
+            state = node.replay_since_checkpoint()
         except ChainError as e:
             log.record(node.id, "settle_failed", reason="replay failed", code=str(e.code))
             raise SettleError(f"{node.id} can't replay its own chain: {e}") from e
@@ -118,9 +121,10 @@ class Cluster:
     """A network of independent nodes on one simulated clock: 3 by default, as the spec starts with."""
 
     def __init__(self, params: ChainParams, seed: int | str, *, node_count: int = 3,
-                 chain: Sequence[Block] | None = None, min_latency_ms: int = 20, max_latency_ms: int = 200,
-                 drop_rate: float = 0.0, **node_options):
+                 chain: Sequence[Block] | None = None, start_time: int | None = None, min_latency_ms: int = 20,
+                 max_latency_ms: int = 200, drop_rate: float = 0.0, **node_options):
         start = chain[-1].header.timestamp if chain else params.genesis_timestamp
+        start = start if start_time is None else start_time
         self.params = params
         self.sim = Simulator(seed, start_time=start)
         self.log = EventLog(self.sim)

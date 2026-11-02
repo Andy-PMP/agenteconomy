@@ -10,7 +10,6 @@ from scenarios import PARAMS as MINING_PARAMS
 from agenteconomy.chain.block import Block, meets_target
 from agenteconomy.chain.validation import validate_chain
 from agenteconomy.network import miner as miner_module
-from agenteconomy.network import settle as settle_module
 from agenteconomy.network.miner import MiningProcess
 from agenteconomy.network.settle import Cluster, SettleError
 
@@ -112,8 +111,8 @@ def test_settle_refuses_nodes_whose_replays_differ(cluster, monkeypatch):
     a.submit_block(next_block(a.tip_block.header))
     cluster.sim.run_until_idle()
     b.state.balances[CAROL.public_hex] += 1
-    states = iter([a.state, b.state, cluster.nodes[2].state])
-    monkeypatch.setattr(settle_module, "validate_chain", lambda blocks, params: next(states))
+    for node in cluster.nodes:
+        monkeypatch.setattr(node, "replay_since_checkpoint", lambda node=node: node.state)
     with pytest.raises(SettleError):
         cluster.settle()
     assert cluster.log.of_kind("settle_failed")[-1]["reason"] == "nodes replayed to different states"

@@ -1,1 +1,2 @@
 cryptography>=50,<51
+pillow>=13,<14

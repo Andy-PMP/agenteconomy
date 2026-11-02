@@ -17,7 +17,7 @@ from .block import (
 )
 from .errors import ChainError, Code
 from .params import ChainParams
-from .state import State, apply_block, apply_tx
+from .state import State, apply_block, apply_tx, finish_block, start_block
 from .transaction import COINBASE, USER_KINDS, Transaction, check_transaction, make_coinbase, make_genesis_tx
 
 
@@ -30,9 +30,10 @@ def make_genesis(params: ChainParams) -> Block:
 
 
 def build_block(params: ChainParams, parent: BlockHeader, *, miner: str, txs: Sequence[Transaction],
-                timestamp: int) -> Block:
-    """An unmined block on top of `parent`: run mine() on its header to finish it."""
-    all_txs = (make_coinbase(params, to=miner, height=parent.height + 1), *txs)
+                timestamp: int, supply: int = 0) -> Block:
+    """An unmined block on top of `parent`: run mine() on its header to finish it. `supply` sets the soft-cap reward."""
+    coinbase = make_coinbase(params, to=miner, height=parent.height + 1, amount=params.reward_at(supply))
+    all_txs = (coinbase, *txs)
     header = BlockHeader(version=BLOCK_VERSION, height=parent.height + 1, prev_hash=parent.hash_hex,
                          merkle_root=compute_merkle_root(all_txs), timestamp=timestamp,
                          difficulty_bits=params.difficulty_bits, nonce=0)
@@ -60,28 +61,30 @@ def validate_block(block: Block, parent: BlockHeader, state: State, params: Chai
     if compute_merkle_root(block.txs) != header.merkle_root:
         raise ChainError(Code.BAD_MERKLE_ROOT)
 
-    _check_coinbase(block.txs[0], header, params)
+    _check_coinbase(block.txs[0], header, params, state.supply)
     if len({tx.id for tx in block.txs}) != len(block.txs):
         raise ChainError(Code.DUPLICATE_TX)
 
     new_state = state.copy()
-    apply_tx(new_state, block.txs[0])
+    start_block(new_state, header.height)
+    apply_tx(new_state, block.txs[0], params)
     for tx in block.txs[1:]:
         if tx.kind == COINBASE:
             raise ChainError(Code.BAD_COINBASE, "more than one coinbase")
         if tx.kind not in USER_KINDS:
             raise ChainError(Code.UNEXPECTED_KIND, tx.kind)
         check_transaction(tx, params)
-        apply_tx(new_state, tx)
+        apply_tx(new_state, tx, params)
+    finish_block(new_state, block, params)
     return new_state
 
 
-def _check_coinbase(tx: Transaction, header: BlockHeader, params: ChainParams) -> None:
+def _check_coinbase(tx: Transaction, header: BlockHeader, params: ChainParams, supply: int) -> None:
     if tx.kind != COINBASE:
         raise ChainError(Code.BAD_COINBASE, "the first transaction must be the coinbase")
     check_transaction(tx, params)
-    if tx.body["amount"] != params.block_reward:
-        raise ChainError(Code.BAD_COINBASE, f"pays {tx.body['amount']}, reward is {params.block_reward}")
+    if tx.body["amount"] != params.reward_at(supply):
+        raise ChainError(Code.BAD_COINBASE, f"pays {tx.body['amount']}, reward is {params.reward_at(supply)}")
     if tx.body["height"] != header.height:
         raise ChainError(Code.BAD_COINBASE, "height doesn't match the block")
 
@@ -91,7 +94,7 @@ def validate_chain(blocks: Sequence[Block], params: ChainParams) -> State:
     if not blocks or blocks[0].to_dict() != make_genesis(params).to_dict():
         raise ChainError(Code.BAD_GENESIS)
 
-    state = apply_block(State(), blocks[0])
+    state = apply_block(State(), blocks[0], params)
     for parent, block in zip(blocks, blocks[1:], strict=False):
         state = validate_block(block, parent.header, state, params)
     return state

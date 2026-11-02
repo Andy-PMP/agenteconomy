@@ -238,7 +238,7 @@ def test_supply_overflow_is_refused():
     state = State(minted=2**53 - 1)
     before = state.copy()
     with pytest.raises(ChainError) as e:
-        apply_tx(state, make_coinbase(PARAMS, to=ALICE.public_hex, height=1))
+        apply_tx(state, make_coinbase(PARAMS, to=ALICE.public_hex, height=1), PARAMS)
     assert e.value.code == Code.SUPPLY_OVERFLOW
     assert state == before
 
@@ -255,7 +255,7 @@ def test_validate_chain_replays_to_the_final_state():
     state = validate_chain(blocks, PARAMS)
     expected = genesis_state()
     for block in blocks[1:]:
-        expected = apply_block(expected, block)
+        expected = apply_block(expected, block, PARAMS)
     assert state == expected
     assert state.supply == sum(state.balances.values())
 

@@ -61,7 +61,7 @@ def test_invalid_transactions_are_refused(tx, code):
 
 def test_old_nonce_is_refused():
     block = mined_block(GENESIS.header, [pay(nonce=0)])
-    state = apply_block(genesis_state(), block)
+    state = apply_block(genesis_state(), block, PARAMS)
     assert add_code(Mempool(PARAMS), pay(amount=11, nonce=0), state) == Code.NONCE_TOO_LOW
 
 
@@ -152,7 +152,7 @@ def test_new_tip_removes_included_transactions():
     included, waiting = pay(nonce=0), pay(BOB, CAROL)
     pool = pool_with(included, waiting)
     block = mined_block(GENESIS.header, [included])
-    pool.on_new_tip(block, apply_block(genesis_state(), block))
+    pool.on_new_tip(block, apply_block(genesis_state(), block, PARAMS))
     assert included not in pool
     assert waiting in pool
 
@@ -162,7 +162,7 @@ def test_new_tip_drops_transactions_it_made_invalid():
     mine_view = pay(to=BOB, nonce=0)
     pool = pool_with(mine_view)
     block = mined_block(GENESIS.header, [pay(to=CAROL, nonce=0)])
-    pool.on_new_tip(block, apply_block(genesis_state(), block))
+    pool.on_new_tip(block, apply_block(genesis_state(), block, PARAMS))
     assert len(pool) == 0
 
 
@@ -180,7 +180,7 @@ def test_reorg_returns_transactions_to_the_pool():
     tx = pay()
     block = mined_block(GENESIS.header, [tx])
     pool = pool_with(tx)
-    pool.on_new_tip(block, apply_block(genesis_state(), block))
+    pool.on_new_tip(block, apply_block(genesis_state(), block, PARAMS))
     assert tx not in pool
 
     refused = pool.readd_after_reorg(list(block.txs), genesis_state())
@@ -192,7 +192,7 @@ def test_reorg_drops_transactions_invalid_on_the_new_chain():
     abandoned = pay(to=BOB, nonce=0)
     winning = mined_block(GENESIS.header, [pay(to=CAROL, nonce=0)])
     pool = Mempool(PARAMS)
-    refused = pool.readd_after_reorg([abandoned], apply_block(genesis_state(), winning))
+    refused = pool.readd_after_reorg([abandoned], apply_block(genesis_state(), winning, PARAMS))
     assert refused == {abandoned.id: Code.NONCE_TOO_LOW}
     assert len(pool) == 0
 

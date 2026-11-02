@@ -16,4 +16,7 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 node scripts\verify_vectors.mjs testdata\chain_vectors_v1.json
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+node scripts\verify_vectors.mjs testdata\economy_vectors_v1.json
 exit $LASTEXITCODE

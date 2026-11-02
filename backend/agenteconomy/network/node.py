@@ -35,7 +35,7 @@ from .simulator import Simulator
 
 # Transaction problems no honest node would relay. The rest (say, a stale nonce) can be innocent timing.
 _PROVABLY_BAD_TX = {Code.BAD_SIGNATURE, Code.WRONG_CHAIN, Code.SELF_TRANSFER, Code.INVALID_AMOUNT, Code.FEE_TOO_LOW,
-                    Code.INVALID_PUBLIC_KEY, Code.UNEXPECTED_KIND}
+                    Code.INVALID_PUBLIC_KEY, Code.UNEXPECTED_KIND, Code.INVALID_OFFER}
 _SYNC_RETRY_MS = 5_000
 
 
@@ -56,7 +56,8 @@ class _Entry:
 
 class Node:
     def __init__(self, node_id: str, params: ChainParams, sim: Simulator, network: Network, log: EventLog, *,
-                 chain: Sequence[Block] | None = None, ban_threshold: int = 10, max_orphans: int = 100,
+                 chain: Sequence[Block] | None = None, trusted_state: State | None = None,
+                 ban_threshold: int = 10, max_orphans: int = 100,
                  max_future_ms: int = 60_000):
         self.id = node_id
         self.params = params
@@ -78,12 +79,16 @@ class Node:
         self._tip_listeners: list[Callable[[], None]] = []
         self._closed = False
         self._settling = False
-        self._load_chain(list(chain) if chain else [make_genesis(params)])
+        self._load_chain(list(chain) if chain else [make_genesis(params)], trusted_state)
         network.register(node_id, self.on_message, self.announce)
 
-    def _load_chain(self, blocks: list[Block]) -> None:
-        """Start from a saved chain. It was settled when saved, so its tip is the checkpoint."""
-        state = validate_chain(blocks, self.params)
+    def _load_chain(self, blocks: list[Block], trusted_state: State | None) -> None:
+        """Start from a saved chain. It was settled when saved, so its tip is the checkpoint.
+
+        Pass `trusted_state` only for a state that already came from replaying these blocks: replaying a whole chain
+        on every node every day would grow without limit.
+        """
+        state = trusted_state.copy() if trusted_state is not None else validate_chain(blocks, self.params)
         work = 0
         for block in blocks:
             if block.header.height > 0:
@@ -93,6 +98,7 @@ class Node:
         self._tip = self._entries[self._main[-1]]
         self._tip.state = state
         self._checkpoint_height = self._tip.height
+        self._checkpoint_state = state.copy()
 
     # What the rest of the system reads
 
@@ -126,6 +132,14 @@ class Node:
     def main_chain(self) -> list[Block]:
         return [self._entries[block_hash].block for block_hash in self._main]
 
+    def replay_since_checkpoint(self) -> State:
+        """Rebuild the tip's state from the blocks alone, starting from the last checkpoint. Raises ChainError."""
+        chain = self.main_chain()
+        state = self._checkpoint_state
+        for height in range(self._checkpoint_height + 1, len(chain)):
+            state = validate_block(chain[height], chain[height - 1].header, state, self.params)
+        return state
+
     def side_blocks(self) -> list[Block]:
         """Valid blocks this node stored that aren't on its main chain."""
         main = set(self._main)
@@ -148,7 +162,8 @@ class Node:
         """An unmined block on the current tip, with the best waiting transactions."""
         txs = self.mempool.select(self.state, self.params.max_block_txs - 1)
         timestamp = max(self._sim.now, self._tip.block.header.timestamp)
-        return build_block(self.params, self._tip.block.header, miner=miner, txs=txs, timestamp=timestamp)
+        return build_block(self.params, self._tip.block.header, miner=miner, txs=txs, timestamp=timestamp,
+                           supply=self.state.supply)
 
     def mine(self, miner: str, max_attempts: int) -> Block | None:
         """Spend a fixed hash budget on the tip. If it finds a block, it's accepted and relayed."""
@@ -329,7 +344,8 @@ class Node:
         self._tip = new
 
         for block in adopted:
-            self.mempool.on_new_tip(block, new.state)
+            for tx, code in self.mempool.on_new_tip(block, new.state):
+                self._log.record(self.id, "tx_dropped", tx=tx.id.hex(), sender=tx.sender, code=str(code))
         if abandoned:
             self._return_abandoned(old, new, abandoned, adopted)
         self._log.record(self.id, "tip_changed", tip=new.hash, height=new.height)
@@ -419,6 +435,7 @@ class Node:
             if entry is not self._tip:
                 entry.state = None
         self._checkpoint_height = self.height
+        self._checkpoint_state = self.state.copy()
         self._orphans.clear()
         self._search_nonce.clear()
         self._log.record(self.id, "checkpoint", tip=self.tip, height=self.height)

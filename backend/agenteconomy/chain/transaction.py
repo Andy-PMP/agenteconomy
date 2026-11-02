@@ -18,14 +18,20 @@ TX_VERSION = 1
 TRANSFER = "transfer"
 COINBASE = "coinbase"
 GENESIS = "genesis"
+OFFER = "offer"
+ACCEPT = "accept"
+REJECT = "reject"
 
 # Each kind's exact body fields. Kinds not in USER_KINDS are minted by the protocol: no sender, no signature.
 _BODY_FIELDS = {
     TRANSFER: {"to", "amount"},
     COINBASE: {"to", "amount", "height"},
     GENESIS: {"to", "amount"},
+    OFFER: {"to", "give_coins", "give_creatures", "want_coins", "want_creatures", "expires_at", "counter_of"},
+    ACCEPT: {"offer_id"},
+    REJECT: {"offer_id"},
 }
-USER_KINDS = frozenset({TRANSFER})
+USER_KINDS = frozenset({TRANSFER, OFFER, ACCEPT, REJECT})
 
 _FIELDS = {"version", "chain_id", "kind", "sender", "nonce", "fee", "body", "signature"}
 _HEX_64 = re.compile(r"[0-9a-f]{64}")
@@ -86,8 +92,8 @@ class Transaction:
 
     @property
     def spend(self) -> int:
-        """What the sender's balance must cover."""
-        return self.body["amount"] + self.fee
+        """What the sender's balance must cover before any later checks."""
+        return self.body.get("amount", 0) + self.fee
 
     def check_shape(self) -> None:
         """Types and format only, needing no chain context."""
@@ -115,12 +121,26 @@ class Transaction:
         body = self.body
         if not isinstance(body, dict) or set(body) != _BODY_FIELDS[self.kind]:
             raise ChainError(Code.MALFORMED, f"body fields don't match {self.kind}")
-        if not is_hash_hex(body["to"]):
+        if "to" in body and not is_hash_hex(body["to"]):
             raise ChainError(Code.MALFORMED, "to must be a lowercase hex address")
-        if not is_int(body["amount"]):
+        if "amount" in body and not is_int(body["amount"]):
             raise ChainError(Code.MALFORMED, "amount must be an integer")
         if "height" in body and not _is_count(body["height"]):
             raise ChainError(Code.MALFORMED, "height must be a non-negative integer")
+        if "offer_id" in body and not is_hash_hex(body["offer_id"]):
+            raise ChainError(Code.MALFORMED, "offer_id must be a transaction ID")
+        if self.kind == OFFER:
+            self._check_offer_shape()
+
+    def _check_offer_shape(self) -> None:
+        body = self.body
+        if not all(_is_count(body[field]) for field in ("give_coins", "want_coins", "expires_at")):
+            raise ChainError(Code.MALFORMED, "coin amounts and expires_at must be non-negative integers")
+        for field in ("give_creatures", "want_creatures"):
+            if not isinstance(body[field], list) or not all(is_hash_hex(item) for item in body[field]):
+                raise ChainError(Code.MALFORMED, f"{field} must be a list of creature IDs")
+        if body["counter_of"] is not None and not is_hash_hex(body["counter_of"]):
+            raise ChainError(Code.MALFORMED, "counter_of must be a transaction ID or null")
 
 
 def check_transaction(tx: Transaction, params: ChainParams) -> None:
@@ -128,31 +148,71 @@ def check_transaction(tx: Transaction, params: ChainParams) -> None:
     tx.check_shape()
     if tx.chain_id != params.chain_id:
         raise ChainError(Code.WRONG_CHAIN, tx.chain_id)
-    if not is_usable_public_key(tx.body["to"]):
+    if "to" in tx.body and not is_usable_public_key(tx.body["to"]):
         raise ChainError(Code.INVALID_PUBLIC_KEY, "recipient")
     if tx.kind in USER_KINDS and not is_usable_public_key(tx.sender):
         raise ChainError(Code.INVALID_PUBLIC_KEY, "sender")
-    if tx.body["amount"] <= 0:
+    # A coinbase can be 0 once supply reaches the cap; whether it's the right amount is checked with the block.
+    if "amount" in tx.body and tx.body["amount"] < (0 if tx.kind == COINBASE else 1):
         raise ChainError(Code.INVALID_AMOUNT, str(tx.body["amount"]))
     if tx.kind in USER_KINDS:
-        if tx.sender == tx.body["to"]:
+        if tx.sender == tx.body.get("to"):
             raise ChainError(Code.SELF_TRANSFER)
+        if tx.kind == OFFER:
+            _check_offer_terms(tx.body, params)
         if tx.fee < params.min_fee:
             raise ChainError(Code.FEE_TOO_LOW, f"{tx.fee} is under {params.min_fee}")
         if not verify(tx.sender, tx.signature, tx.signing_bytes):
             raise ChainError(Code.BAD_SIGNATURE)
 
 
-def sign_transfer(keys: KeyPair, chain_id: str, *, to: str, amount: int, nonce: int, fee: int) -> Transaction:
-    unsigned = Transaction(version=TX_VERSION, chain_id=chain_id, kind=TRANSFER, sender=keys.public_hex, nonce=nonce,
-                           fee=fee, body={"to": to, "amount": amount}, signature=None)
+def _check_offer_terms(body: dict[str, Any], params: ChainParams) -> None:
+    gives, wants = body["give_creatures"], body["want_creatures"]
+    if body["give_coins"] and body["want_coins"]:
+        raise ChainError(Code.INVALID_OFFER, "coins can only move one way")
+    if not (body["give_coins"] or body["want_coins"] or gives or wants):
+        raise ChainError(Code.INVALID_OFFER, "the offer exchanges nothing")
+    for creatures in (gives, wants):
+        if len(creatures) > params.max_offer_creatures:
+            raise ChainError(Code.INVALID_OFFER, "too many creatures")
+        # One spelling per set of creatures, so a list can't be reordered into a different transaction.
+        if creatures != sorted(set(creatures)):
+            raise ChainError(Code.INVALID_OFFER, "creature IDs must be sorted with no repeats")
+    if set(gives) & set(wants):
+        raise ChainError(Code.INVALID_OFFER, "the same creature is on both sides")
+
+
+def sign_tx(keys: KeyPair, chain_id: str, kind: str, body: dict[str, Any], *, nonce: int, fee: int) -> Transaction:
+    unsigned = Transaction(version=TX_VERSION, chain_id=chain_id, kind=kind, sender=keys.public_hex, nonce=nonce,
+                           fee=fee, body=body, signature=None)
     return Transaction(**{**unsigned.to_dict(), "signature": keys.sign(unsigned.signing_bytes)})
 
 
-def make_coinbase(params: ChainParams, *, to: str, height: int) -> Transaction:
+def sign_transfer(keys: KeyPair, chain_id: str, *, to: str, amount: int, nonce: int, fee: int) -> Transaction:
+    return sign_tx(keys, chain_id, TRANSFER, {"to": to, "amount": amount}, nonce=nonce, fee=fee)
+
+
+def sign_offer(keys: KeyPair, chain_id: str, *, to: str, give_coins: int = 0, give_creatures: tuple[str, ...] = (),
+               want_coins: int = 0, want_creatures: tuple[str, ...] = (), expires_at: int,
+               counter_of: str | None = None, nonce: int, fee: int) -> Transaction:
+    body = {"to": to, "give_coins": give_coins, "give_creatures": list(give_creatures), "want_coins": want_coins,
+            "want_creatures": list(want_creatures), "expires_at": expires_at, "counter_of": counter_of}
+    return sign_tx(keys, chain_id, OFFER, body, nonce=nonce, fee=fee)
+
+
+def sign_accept(keys: KeyPair, chain_id: str, *, offer_id: str, nonce: int, fee: int) -> Transaction:
+    return sign_tx(keys, chain_id, ACCEPT, {"offer_id": offer_id}, nonce=nonce, fee=fee)
+
+
+def sign_reject(keys: KeyPair, chain_id: str, *, offer_id: str, nonce: int, fee: int) -> Transaction:
+    return sign_tx(keys, chain_id, REJECT, {"offer_id": offer_id}, nonce=nonce, fee=fee)
+
+
+def make_coinbase(params: ChainParams, *, to: str, height: int, amount: int | None = None) -> Transaction:
     # The height makes every coinbase unique, so two blocks paying the same miner don't share a transaction ID.
+    amount = params.block_reward if amount is None else amount
     return Transaction(version=TX_VERSION, chain_id=params.chain_id, kind=COINBASE, sender=None, nonce=0, fee=0,
-                       body={"to": to, "amount": params.block_reward, "height": height}, signature=None)
+                       body={"to": to, "amount": amount, "height": height}, signature=None)
 
 
 def make_genesis_tx(params: ChainParams, *, to: str, amount: int) -> Transaction:

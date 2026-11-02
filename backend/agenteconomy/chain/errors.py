@@ -22,6 +22,13 @@ class Code(StrEnum):
     INSUFFICIENT_BALANCE = "insufficient_balance"
     SUPPLY_OVERFLOW = "supply_overflow"
 
+    # Offers and creatures
+    INVALID_OFFER = "invalid_offer"
+    OFFER_NOT_OPEN = "offer_not_open"
+    NOT_OFFER_PARTY = "not_offer_party"
+    TOO_MANY_OFFERS = "too_many_offers"
+    NOT_OWNER = "not_owner"
+
     # Blocks
     BAD_GENESIS = "bad_genesis"
     BAD_HEIGHT = "bad_height"
