@@ -116,6 +116,24 @@ def test_action_limit_is_enforced_and_logged(cluster):
     assert tools.actions_used == 2
 
 
+def test_mine_limit_is_enforced_and_shown_in_the_view(cluster):
+    tools = make_tools(cluster.nodes[0], cluster=cluster, mine_limit=2)
+    assert tools.view().mines_left == 2
+    tools.execute(Mine())
+    assert tools.view().mines_left == 1
+    tools.execute(Mine())
+    assert tools.view().mines_left == 0
+    calls = []
+    cluster.nodes[0].mine = lambda miner, budget: calls.append(1)
+    assert tools.execute(Mine()) == ActionResult(False, "mine_limit")
+    assert calls == []
+    assert tools.view().mines_left == 0
+
+
+def test_no_mine_limit_by_default(tools):
+    assert tools.view().mines_left is None
+
+
 def test_failed_actions_still_use_up_the_limit(cluster):
     tools = make_tools(cluster.nodes[0], cluster=cluster, action_limit=1)
     tools.execute(Accept("ab" * 32))
@@ -420,7 +438,7 @@ def test_saved_file_contains_no_keys(tmp_path):
     world.save(path)
     text = path.read_text(encoding="utf-8")
     assert "public test seed" not in text
-    assert json.loads(text).keys() == {"blocks", "reports", "shocks"}
+    assert json.loads(text).keys() == {"blocks", "reports", "shocks", "memories"}
 
 
 def test_load_rebuilds_state_from_the_blocks(tmp_path):

@@ -17,13 +17,23 @@ data/days/2026-11-02/agents.json
 |---|---|---|
 | `index.json` | JSON | Schema version, the list of published days, and the SHA-256 of every file |
 | `blocks.jsonl` | JSON Lines, one block per line | Block headers and transactions, in the format below |
-| `events.jsonl` | JSON Lines, one event per line | Trades, messages, agent rationales, injection attempts, shocks |
+| `events.jsonl` | JSON Lines, one event per line | Trades, messages, agent rationales, injection attempts, shocks. Rationale entries are drafted below |
 | `agents.json` | JSON | Each agent's stats for the day, plus the day's cost |
 
 - **Start from `index.json`.** A day exists only once it's listed there. The index is written last, so a failed run never exposes a partial day.
 - **Day files don't change** once published. Only `index.json` updates, so day files can be cached indefinitely.
 - **Files hold only the settled chain.** Nodes can disagree during a day, but `blocks.jsonl` contains only the chain they all agreed on at the end of it. Blocks that lost a fork and reorgs are reported as events in `events.jsonl`, not as chain data.
 - **Free text is never on-chain.** Messages and rationales live in `events.jsonl`, and they appear only after passing the content filter. A blocked item keeps its place as a placeholder with the text's hash; the text itself isn't published.
+
+## Agent decisions (draft)
+
+Rationales are stored off-chain and aren't published until the content filter exists (P8). The fields may still change before P6 finalizes the export.
+
+An `agent_decision` event has `time`, `node` (the agent's name), `turn`, `tool` (the action chosen, or `pass_turn`), `rationale` (at most 200 characters, or null if the agent passed because of a limit or failure), `calls` (model calls that turn), and `reason` when a limit or failure caused the pass. An `agent_action` event follows with the outcome: `action`, `ok`, `code`, `tx`, `block`.
+
+A daily **model record** makes each day's model use reconstructable. It's kept privately, because it holds full prompts: `day`, `model_id`, `settings`, `prompts` (a hash per agent), `tools_hash`, `model_calls`, `model_cost_nanos` (nanodollars), `model_errors`, `refused_calls`, and `calls`, where each call has its `agent`, `purpose`, `attempt`, `outcome`, `messages`, `tool_calls`, `input_tokens`, `output_tokens` and `cost_nanos`.
+
+Replay shows the recorded run. Models aren't deterministic, so a day can't be re-executed to the same result.
 
 ## Block
 

@@ -4,7 +4,7 @@ An agent never receives a key, a node or this object, so a manipulated agent can
 allow. P4 maps the model's tool calls onto the same Actions.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..chain.creature import Creature
 from ..chain.errors import ChainError
@@ -13,7 +13,7 @@ from ..chain.state import Offer
 from ..chain.transaction import sign_accept, sign_offer, sign_reject
 from ..network.network import EventLog
 from ..network.node import Node
-from .market import FULL, Conditions, appraise
+from .market import FULL, Conditions, Trade, appraise
 
 
 @dataclass(frozen=True)
@@ -74,7 +74,11 @@ class View:
     rivals: tuple[str, ...]
     conditions: Conditions
     shocks: tuple[str, ...]
-    dropped_yesterday: int
+    dropped_yesterday: int  # this agent's own
+    names: dict[str, str] = field(default_factory=dict)  # address to agent name
+    prices: dict[str, int] = field(default_factory=dict)  # recent average coin price per species
+    recent_trades: tuple[Trade, ...] = ()
+    mines_left: int | None = None  # None: no daily limit
 
     def mine(self) -> list[Listing]:
         return [listing for listing in self.listings if listing.owner == self.me]
@@ -90,6 +94,22 @@ class View:
 
 
 @dataclass(frozen=True)
+class DayFacts:
+    """What really happened to one agent in a day, computed from the settled chain and the action log."""
+
+    day: int
+    coins_start: int
+    coins_end: int
+    worth_start: int
+    worth_end: int
+    blocks_mined: int
+    trades: tuple[dict, ...]
+    failed_actions: dict[str, int]
+    dropped_transactions: int
+    shocks: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class ActionResult:
     ok: bool
     code: str | None = None
@@ -102,7 +122,9 @@ class AgentTools:
 
     def __init__(self, name: str, keys: KeyPair, node: Node, log: EventLog, *, hash_budget: int, fee: int,
                  action_limit: int, offer_ttl: int, day: int, conditions: Conditions, rivals: tuple[str, ...],
-                 shocks: tuple[str, ...] = (), dropped_yesterday: int = 0):
+                 shocks: tuple[str, ...] = (), dropped_yesterday: int = 0, names: dict[str, str] | None = None,
+                 prices: dict[str, int] | None = None, recent_trades: tuple[Trade, ...] = (),
+                 mine_limit: int | None = None):
         self.name = name
         self.address = keys.public_hex
         self._keys = keys
@@ -117,6 +139,11 @@ class AgentTools:
         self._rivals = rivals
         self._shocks = shocks
         self._dropped_yesterday = dropped_yesterday
+        self._names = names or {}
+        self._prices = prices or {}
+        self._recent_trades = recent_trades
+        self._mine_limit = mine_limit
+        self._mines_used = 0
         self.actions_used = 0
 
     def view(self) -> View:
@@ -142,6 +169,10 @@ class AgentTools:
             conditions=self._conditions,
             shocks=self._shocks,
             dropped_yesterday=self._dropped_yesterday,
+            names=dict(self._names),
+            prices=dict(self._prices),
+            recent_trades=self._recent_trades,
+            mines_left=None if self._mine_limit is None else max(0, self._mine_limit - self._mines_used),
         )
 
     def execute(self, action: Action) -> ActionResult:
@@ -160,6 +191,10 @@ class AgentTools:
     def _dispatch(self, action: Action) -> ActionResult:
         match action:
             case Mine():
+                # Without a limit, mining is free money, so a rational agent never does anything else.
+                if self._mine_limit is not None and self._mines_used >= self._mine_limit:
+                    return ActionResult(False, "mine_limit")
+                self._mines_used += 1
                 block = self._node.mine(self.address, self._hash_budget)
                 return ActionResult(True, block=block.header.hash_hex if block else None)
             case MakeOffer():

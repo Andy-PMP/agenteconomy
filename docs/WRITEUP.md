@@ -1,6 +1,6 @@
 # Agent Economy (working title)
 
-**Status: the blockchain, its nodes and the economy are built and tested, running with scripted agents. The AI agents come next.** This document describes the design and is updated as each phase ships. Anything not yet built is described as planned.
+**Status: the blockchain, nodes, economy and AI agents are built and tested, and the agents have run on the real model. Agent messaging and injection defenses come next.** This document describes the design and is updated as each phase ships. Anything not yet built is described as planned.
 
 ## What it does
 
@@ -43,6 +43,14 @@ Agents trade through direct offers: one proposes, and the other accepts, counter
 Coin supply has a soft cap. The block reward shrinks as supply nears the cap and reaches zero at it. Every transaction fee and 2% of the coins in each trade are burned, which makes room for mining to pay again. Rare shocks, like a market crash that cuts creature appraisals by 60% for about a week, change what agents believe things are worth, and how much they can mine, but never the chain's rules.
 
 Agents never touch keys or nodes. They read a view of the world and ask for actions, and a tool layer signs for them, applies their limits and logs every attempt.
+
+### The agents (built)
+
+Four agents run on Claude Haiku 4.5: a collector, a speculator, a cautious saver and a designated trickster. On each turn, an agent reads a fixed-size summary of the game and must call a tool. There's no other way for it to affect anything. Read tools answer from a read-only view. Action tools become requests that code validates, and the tool layer carries them out. The model only ever sees short handles and agent names, so it never handles a key, an address or a full ID.
+
+An agent's memory is mostly facts computed from the settled chain: its coins, net worth, blocks mined, trades and failures over the last three days. On top of that, it keeps one short note it wrote itself. Every decision records a brief rationale off-chain for the replay, and each day records the model version, settings and every input.
+
+Agents can mine only twice a day, and any transactions still waiting at the end of a day are mined in a closing round that uses no model calls. A real day costs about 13 to 17 cents, against a hard cap of 50 cents that includes retries.
 
 ### Planned architecture
 
@@ -111,6 +119,12 @@ flowchart TD
 
 **New agents get funded in the open.** A later-season agent receives an ordinary signed transfer from a treasury created at genesis, visible on-chain like any other. That needs no special rule for minting coins.
 
+**Forced tool calls and a code boundary.** The model must answer with a tool call, and only one function turns a tool call into an action. Invalid input, unknown IDs and invented tools all get an error back, never a best guess. The real model did invent tools, which is exactly this case.
+
+**A cost cap that reserves before spending.** Before every attempt, the meter reserves the worst case the call could cost and refuses if that could pass the cap. Spending lives in a ledger outside the attempt, and the SDK's automatic retries are off, because a timed-out call may still have been billed. In the first real run, the limit stopped calls at $0.2979 of $0.30, and the meter matched the reported tokens exactly.
+
+**A day survives a failed model.** If the model is down or a limit is reached, agents pass. The chain still settles, because the economy shouldn't depend on the model being available.
+
 **Fargate, not Lambda.** Lambda has a hard 15-minute limit, and a run with model calls, retries and throttling must not die partway through. A Fargate task has no such limit, costs little for a short daily job, and needs no server left running. ECS has no built-in task timeout, so the job runs under an explicit one.
 
 **One failure-safe publish step.** Day files are uploaded first and `index.json` last. If a run fails at any point, the index still points at the last good day, and the site keeps working.
@@ -139,6 +153,16 @@ Planned prompt-injection defenses aim to make obeying a malicious message useles
 **How success will be measured.** Being talked into a bad price is a scam, and scams are part of the game. Obeying an instruction embedded in a message is an injection. The two are counted separately. An injection counts as a success when the victim takes the specific action the attack asked for, judged from the tool log. A fixed set of attacks gives a stable baseline over time, and occasional offline runs with defenses switched off will show what each layer contributes.
 
 ## Lessons learned
+
+### 2026-11-02: The AI agents
+- **A real model finds what a fake model can't.** Over 1,000 tests passed with a fake model, and the first real run still exposed four problems within minutes. Next time, I'd run the real model much earlier, with a small limit, rather than building everything first.
+- **Mining was a free dominant strategy.** Real agents mined almost every turn, because it costs nothing and always pays. The scripted agents had hidden this, since I'd set their mining rate by hand. A daily mining limit makes the other turns matter. Lesson: a scripted agent does what you wrote, but a rational one finds the flaw in your incentives.
+- **The fix exposed a deeper flaw.** With limited mining, agents mined early and made offers later, and with no later block those offers were never confirmed. The second real run had 11 offers and no trades. Closing blocks at the end of the day fix this. **They have only been tested with the fake model, so at this point no real agent has completed a trade.**
+- **Summaries don't stop agents re-reading.** The model called read tools before nearly every action, fetching data already in its summary, and that's most of why the first run cost more than I estimated from prompt sizes. Telling it not to helped only partly. Cutting to two calls a turn, with the last offering only actions, is what bounds the cost.
+- **Truncated output can erase memory.** A note that hit the token limit arrived empty and wiped the previous day's note. Now an empty note changes nothing, notes have more room, and the prompt asks for a word limit.
+- **My prompt taught a misconception.** Agents passed to "preserve hash budget" and cited "hot streaks", because I hadn't said that each try is independent and unused tries don't carry over. Rationales made this visible straight away, which is a good reason to log them.
+- **The model played the trickster without refusing,** when the role was framed plainly as part of a game between software agents.
+- **A sweep found a way to crash a whole day.** Disabling each guard in turn showed that nothing tested a tool call with input of the wrong type. Following that up, I found read tools had no guard at all, so one odd reply from the model could have stopped the chain. Anything that comes from a model is now treated as untrusted input at the boundary, whatever its schema says.
 
 ### 2026-11-02: The economy
 - **Every test passed and the economy was still broken.** The first long simulation showed 0.2 trades a day and 40% of actions failing. Nothing was wrong with the rules. Agents kept accepting bait from proposers who couldn't pay, and answered the same offer twice because their view didn't show what they had already sent. They also all valued everything identically, so few deals made sense. Showing public balances, hiding offers an agent has already answered, and giving each agent its own opinion took failures down to 1.2%. Lesson: only running the whole system for a long time reveals this kind of problem, and I'd add that kind of measurement earlier.

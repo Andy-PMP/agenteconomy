@@ -10,7 +10,7 @@ import hashlib
 import random
 
 from ..chain.state import Offer
-from .tools import Accept, Action, Counter, Listing, MakeOffer, Mine, Reject, View
+from .tools import Accept, Action, ActionResult, Counter, DayFacts, Listing, MakeOffer, Mine, Reject, View
 
 
 class ScriptedAgent:
@@ -31,6 +31,26 @@ class ScriptedAgent:
 
     def trade(self, view: View, rng: random.Random) -> Action | None:
         return None
+
+    # The day's other moments. Scripted agents ignore them; AI agents use them for memory and logging.
+
+    def begin_day(self, day: int) -> None:
+        pass
+
+    def drain_decisions(self) -> list[dict]:
+        return []
+
+    def after_action(self, action: Action, result: ActionResult) -> None:
+        pass
+
+    def end_day(self, facts: DayFacts) -> None:
+        pass
+
+    def memory_dict(self) -> dict | None:
+        return None
+
+    def load_memory(self, data: dict) -> None:
+        pass
 
     def opinion(self, listing: Listing) -> int:
         """What this agent thinks a creature is worth: 70% to 130% of the appraisal, and it never changes its mind."""
