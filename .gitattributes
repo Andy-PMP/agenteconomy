@@ -1,0 +1,3 @@
+* text=auto
+# sh can't run a hook with CRLF line endings
+.githooks/* text eol=lf
