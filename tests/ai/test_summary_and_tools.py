@@ -224,9 +224,9 @@ def test_every_action_tool_requires_a_rationale():
 
 def test_tool_list_is_exactly_the_allowed_surface():
     assert {tool["name"] for tool in t.ACTION_TOOLS} == {"mine", "make_offer", "accept_offer", "counter_offer",
-                                                        "reject_offer", "pass_turn"}
+                                                        "reject_offer", "send_message", "pass_turn"}
     assert {tool["name"] for tool in t.READ_TOOLS} == {"get_holdings", "find_creatures", "get_recent_trades",
-                                                       "get_market_prices", "get_open_offers"}
+                                                       "get_market_prices", "get_open_offers", "read_inbox"}
     assert t.is_action("mine") and not t.is_action("get_holdings")
 
 

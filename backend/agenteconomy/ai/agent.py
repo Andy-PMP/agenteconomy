@@ -9,9 +9,10 @@ import random
 from typing import Any
 
 from ..economy.agents import ScriptedAgent
+from ..economy.messages import clean_text
 from ..economy.tools import Action, ActionResult, DayFacts, View
 from .budget import CapReached, ModelCaller, ModelUnavailable
-from .memory import AgentMemory
+from .memory import MAX_NOTE, AgentMemory, note_problem
 from .model import ModelReply
 from .summary import digest
 from .tool_schemas import (
@@ -41,13 +42,17 @@ class AIAgent(ScriptedAgent):
         self._today: list[str] = []
         self._decisions: list[dict[str, Any]] = []
         self._turn = 0
+        self._read_this_turn: list[int] = []
+        self._seen_today: list[str] = []
 
     def begin_day(self, day: int) -> None:
         self._today = []
         self._turn = 0
+        self._seen_today = []
 
     def decide(self, view: View, rng: random.Random) -> Action | None:
         self._turn += 1
+        self._read_this_turn = []
         turn_digest = digest(view, today=self._today, memory=self.memory.for_model())
         messages = [{"role": "user", "content": [{"text": json.dumps(turn_digest, sort_keys=True)}]}]
         for call_number in range(1, CALLS_PER_TURN + 1):
@@ -67,7 +72,7 @@ class AIAgent(ScriptedAgent):
             chosen, results = self._handle(reply, view)
             if chosen is not None:
                 action, rationale, tool = chosen
-                self._decisions.append({"turn": self._turn, "tool": tool, "rationale": rationale, "calls": call_number})
+                self._record({"tool": tool, "rationale": rationale, "calls": call_number})
                 return action
             messages = messages + [_assistant_message(reply), {"role": "user", "content": results}]
         return self._pass("out of calls this turn")
@@ -81,13 +86,21 @@ class AIAgent(ScriptedAgent):
                     action, rationale = parse_action(call.name, call.input, view)
                     return (action, rationale, call.name), []
                 results.append(_result(call.id, answer_read(call.name, call.input, view), "success"))
+                if call.name == "read_inbox":
+                    self._read_this_turn += [message.id for message in view.inbox]
+                    self._seen_today += [message.text for message in view.inbox]
             except ToolInputError as e:
                 results.append(_result(call.id, {"error": str(e)}, "error"))
         return None, results
 
     def _pass(self, reason: str) -> None:
-        self._decisions.append({"turn": self._turn, "tool": PASS, "rationale": None, "reason": reason})
+        self._record({"tool": PASS, "rationale": None, "reason": reason})
         return None
+
+    def _record(self, decision: dict[str, Any]) -> None:
+        if self._read_this_turn:
+            decision["messages_read"] = self._read_this_turn
+        self._decisions.append({"turn": self._turn, **decision})
 
     def drain_decisions(self) -> list[dict[str, Any]]:
         decisions, self._decisions = self._decisions, []
@@ -113,8 +126,19 @@ class AIAgent(ScriptedAgent):
             return
         for call in reply.tool_calls:
             if call.name == NOTE and isinstance(call.input, dict):
-                self.memory.set_note(call.input.get("note"))
+                self._save_note(clean_text(call.input.get("note"), MAX_NOTE))
                 return
+
+    def _save_note(self, note: str) -> None:
+        if not note:
+            return
+        problem = note_problem(note, self._seen_today)
+        decision = {"turn": self._turn, "tool": NOTE, "rationale": None, "note": note}
+        if problem:
+            decision["note_rejected"] = problem
+        else:
+            self.memory.set_note(note)
+        self._decisions.append(decision)
 
     def memory_dict(self) -> dict[str, Any]:
         return self.memory.to_dict()

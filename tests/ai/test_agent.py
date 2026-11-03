@@ -295,6 +295,7 @@ def test_an_empty_note_cannot_erase_the_last_good_one(data):
     agent.memory.set_note("old")
     agent.end_day(facts(1))
     assert agent.memory.note == "old"
+    assert agent.drain_decisions() == []  # nothing was written, so nothing is logged as a note
 
 
 def test_note_has_room_and_a_word_limit():
@@ -361,7 +362,7 @@ def test_each_personality_has_shared_rules_and_its_own_goals(personality):
     prompt = system_prompt(personality)
     assert "simulated economy game" in prompt
     assert "no real-world value" in prompt
-    assert len(prompt) < 3000
+    assert len(prompt) < 3500
 
 
 def test_personalities_are_really_different():

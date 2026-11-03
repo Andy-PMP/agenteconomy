@@ -6,6 +6,7 @@ from dataclasses import replace
 from agenteconomy.ai.budget import ModelCaller, SpendLedger
 from agenteconomy.ai.model import FakeModel, ToolCall
 from agenteconomy.ai.roster import PERSONALITIES, build_members
+from agenteconomy.ai.security import SecurityMonitor
 from agenteconomy.chain.creature import hatch
 from agenteconomy.chain.vectors import sample_keys
 from agenteconomy.economy.market import NORMAL
@@ -48,17 +49,19 @@ def plays_the_game(system, messages, tools, max_tokens):
 
 
 def make_world(seed="ai", *, behavior=plays_the_game, ledger=None, calls_per_agent=16, cap_nanos=None, turns=6,
-               action_limit=8, mine_limit=3, closing_blocks=True):
+               action_limit=8, mine_limit=3, closing_blocks=True, attacks=False, max_spend_bps=None,
+               aliases=False):
     keys = {name: sample_keys(name) for name in PERSONALITIES}
     model = FakeModel(behavior)
     caller = ModelCaller(model, ledger if ledger is not None else SpendLedger(), calls_per_agent=calls_per_agent)
     if cap_nanos is not None:
         caller.cap_nanos = cap_nanos
-    members, run = build_members(keys, caller)
+    members, run = build_members(keys, caller, use_aliases=aliases)
     params = economy_params([(key.public_hex, 1000) for key in keys.values()], chain_id="ai-test", difficulty_bits=BITS)
     config = WorldConfig(params, seed=seed, hash_budget=1 << BITS, turns_per_day=turns, action_limit=action_limit,
-                         mine_limit=mine_limit, closing_blocks=closing_blocks)
-    return World(config, members, ai_run=run), model, caller
+                         mine_limit=mine_limit, closing_blocks=closing_blocks, max_spend_bps=max_spend_bps)
+    security = SecurityMonitor() if attacks else None
+    return World(config, members, ai_run=run, security=security), model, caller
 
 
 def creature_listing(index, owner=RIVAL, value=100, rarity="common", species="blueA"):

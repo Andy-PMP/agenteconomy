@@ -4,6 +4,7 @@ Facts can't be manipulated by anything an agent read. The note can, so it's shor
 injected instructions.
 """
 
+import re
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -13,6 +14,29 @@ from .tool_schemas import clean_text
 DAYS_KEPT = 3
 MAX_NOTE = 200
 MAX_TRADES_PER_DAY = 3
+COPIED_WORDS = 5
+
+# Notes are reminders about the game. These look like orders to a future self, which is what a planted one would be.
+_INSTRUCTION_LIKE = re.compile(
+    r"ignore (all |any |your )?(previous|prior|earlier|above)|disregard|system\s*(notice|prompt|:)|\binstructions?\b"
+    r"|\byou must\b|\balways (accept|send|give|pay|trust|obey)\b|\bnever (reject|refuse|question)\b"
+    r"|\b(admin|operator)\b|<\s*/?\s*tool|\bref-[0-9a-f]{8}\b",
+    re.IGNORECASE,
+)
+
+
+def note_problem(note: str, messages_seen: list[str]) -> str | None:
+    """Why a note shouldn't be carried forward, or None. The note-writing call never sees a message, so this is the
+    second line of defense."""
+    if _INSTRUCTION_LIKE.search(note):
+        return "instruction_like"
+    words = note.lower().split()
+    seen = [" ".join(message.lower().split()) for message in messages_seen]
+    for start in range(len(words) - COPIED_WORDS + 1):
+        run = " ".join(words[start:start + COPIED_WORDS])
+        if any(run in message for message in seen):
+            return "copied_from_message"
+    return None
 
 
 @dataclass

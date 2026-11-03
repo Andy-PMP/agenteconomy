@@ -56,7 +56,8 @@ def test_agents_really_mine_trade_and_remember():
 def test_every_decision_is_logged_with_its_rationale():
     world, _, _ = make_world()
     world.run_day()
-    decisions = [entry for entry in world.last_log if entry["kind"] == "agent_decision"]
+    decisions = [entry for entry in world.last_log
+                 if entry["kind"] == "agent_decision" and entry["tool"] != "write_note"]
     assert len(decisions) == 4 * 6
     assert all(entry["rationale"] for entry in decisions)
     assert {entry["node"] for entry in decisions} == set(PERSONALITIES)
@@ -185,7 +186,8 @@ def test_closing_blocks_cost_no_model_calls():
     world, model, _ = make_world(behavior=mines_first_then_offers, mine_limit=1)
     world.run_day()
     closing = [index for index, entry in enumerate(world.last_log) if entry["kind"] == "closing_block"]
-    decisions = [index for index, entry in enumerate(world.last_log) if entry["kind"] == "agent_decision"]
+    decisions = [index for index, entry in enumerate(world.last_log)
+                 if entry["kind"] == "agent_decision" and entry["tool"] != "write_note"]
     assert min(closing) > max(decisions)
     assert len(model.requests) <= 4 * 6 + 4
 
@@ -267,7 +269,8 @@ def test_refusing_to_play_is_a_pass_not_a_failure():
 
     world, _, _ = make_world(behavior=behavior)
     world.run_day()
-    passes = [entry for entry in world.last_log if entry["kind"] == "agent_decision" and entry["node"] == "scammer"]
+    passes = [entry for entry in world.last_log if entry["kind"] == "agent_decision" and entry["node"] == "scammer"
+              and entry["tool"] != "write_note"]
     assert passes and all(entry["tool"] == "pass_turn" for entry in passes)
 
 

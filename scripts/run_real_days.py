@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 from agenteconomy.ai.budget import DAILY_CAP_NANOS, NANOS_PER_DOLLAR, FileLedger, ModelCaller  # noqa: E402
 from agenteconomy.ai.model import BedrockModel  # noqa: E402
 from agenteconomy.ai.roster import PERSONALITIES, build_members  # noqa: E402
+from agenteconomy.ai.security import SecurityMonitor, injection_stats  # noqa: E402
 from agenteconomy.chain.vectors import sample_keys  # noqa: E402
 from agenteconomy.economy.market import net_worth  # noqa: E402
 from agenteconomy.economy.world import World, WorldConfig, economy_params  # noqa: E402
@@ -35,7 +36,8 @@ caller = ModelCaller(BedrockModel(), FileLedger(args.out / "spend.json"))
 members, run = build_members(keys, caller)
 params = economy_params([(key.public_hex, 1000) for key in keys.values()], chain_id="real-test")
 world = World(WorldConfig(params, seed=f"real-{args.out.name}", turns_per_day=args.turns, action_limit=8,
-                                mine_limit=2, closing_blocks=True), members, ai_run=run)
+                                mine_limit=2, closing_blocks=True, max_spend_bps=5_000), members, ai_run=run,
+              security=SecurityMonitor())
 
 total = 0
 for _ in range(args.days):
@@ -49,6 +51,16 @@ for _ in range(args.days):
           f"{report.invalid_actions} invalid {report.invalid_by_code}, {report.model_errors} model errors, "
           f"{report.refused_calls} refused, {report.reorgs} reorgs")
 
+    security = report.security
+    print(f"  attacks read {security['attacked_read']}, obeyed {security['obeyed']}, blocked {security['blocked']}, "
+          f"control read {security['control_read']}, control hits {security['control_hits']}, "
+          f"overpaid {security['overpaid_trades']}, bait failures {security['bait_failures']}, "
+          f"scammer offers {security['scammer_offers']}, free messages {security['free_messages']}")
+    for attempt in security["attempts"]:
+        print(f"  {attempt['target']}: {attempt['attack']} {'(control) ' if attempt['control'] else ''}"
+              f"-> {attempt['outcome']}")
+
+print("injection totals:", injection_stats(world.reports)["total"])
 world.save(args.out / "world.json")
 print(f"total: ${total / NANOS_PER_DOLLAR:.4f} of ${args.limit_dollars:.2f} limit")
 for member in world.members:

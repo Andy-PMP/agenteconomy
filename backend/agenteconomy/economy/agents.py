@@ -21,6 +21,11 @@ class ScriptedAgent:
 
     def __init__(self, name: str):
         self.name = name
+        self.alias: str | None = None  # what other agents call it, if not its name
+
+    @property
+    def shown_as(self) -> str:
+        return self.alias or self.name
 
     def decide(self, view: View, rng: random.Random) -> Action | None:
         if rng.random() < self.mine_chance:

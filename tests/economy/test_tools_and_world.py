@@ -438,7 +438,7 @@ def test_saved_file_contains_no_keys(tmp_path):
     world.save(path)
     text = path.read_text(encoding="utf-8")
     assert "public test seed" not in text
-    assert json.loads(text).keys() == {"blocks", "reports", "shocks", "memories"}
+    assert json.loads(text).keys() == {"blocks", "reports", "shocks", "memories", "messages"}
 
 
 def test_load_rebuilds_state_from_the_blocks(tmp_path):

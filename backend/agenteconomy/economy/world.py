@@ -18,6 +18,7 @@ from ..chain.validation import make_genesis, validate_chain
 from ..network.settle import Cluster, SettleResult
 from .agents import ScriptedAgent
 from .market import Trade, average_prices, net_worth, trades_in_block
+from .messages import MessageBoard
 from .shocks import Shock, conditions_for, roll_shocks
 from .tools import AgentTools, DayFacts
 
@@ -66,6 +67,8 @@ class WorldConfig:
     action_limit: int = 12
     mine_limit: int | None = None  # mine actions per agent per day
     closing_blocks: bool = False  # mine what's still waiting at the end of the day
+    message_limit: int = 3  # messages per agent per day
+    max_spend_bps: int | None = None  # the most of its coins an agent can pay in one trade
     offer_ttl: int = 50
     min_latency_ms: int = 20
     max_latency_ms: int = 800
@@ -102,6 +105,7 @@ class DayReport:
     model_cost_nanos: int = 0
     model_errors: int = 0
     refused_calls: int = 0
+    security: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return dict(self.__dict__)
@@ -126,6 +130,8 @@ class World:
     last_log: list[dict] = field(default_factory=list)
     ai_run: Any = None  # model accounting, when the agents use a model
     last_day_record: dict | None = None
+    board: MessageBoard = field(default_factory=MessageBoard)
+    security: Any = None  # sends and judges the day's attacks, when there are any
     _grants: list[_Grant] = field(default_factory=list)
 
     def __post_init__(self):
@@ -170,6 +176,8 @@ class World:
             self.ai_run.begin_day(day)
         for member in self.members:
             member.agent.begin_day(day)
+        if self.security is not None:
+            self.security.send_attacks(self, cluster, day)
         self._pay_grants(cluster)
         self._schedule_turns(cluster, day, conditions, tuple(shock.kind for shock in todays))
         cluster.run_for(config.turns_per_day * config.turn_ms + config.turn_jitter_ms)
@@ -182,7 +190,10 @@ class World:
         self.state = result.state
         self.last_log = cluster.log.entries
         self._end_day(cluster, result, day, height_before, state_before, conditions, todays)
+        security = {} if self.security is None else self.security.judge_day(self, cluster, day, height_before,
+                                                                            state_before)
         report = self._report(cluster, result, day, height_before, state_before, todays)
+        report.security = security
         if self.ai_run is not None:
             self.last_day_record = self.ai_run.day_record()
         self.reports.append(report)
@@ -191,7 +202,7 @@ class World:
     def _end_day(self, cluster: Cluster, result: SettleResult, day: int, height_before: int, state_before: State,
                  conditions, todays: list[Shock]) -> None:
         """Agents hear what really happened: from the settled chain and the log, not from what they believed."""
-        names = {member.keys.public_hex: member.agent.name for member in self.members}
+        names = {member.keys.public_hex: member.agent.shown_as for member in self.members}
         new_blocks = result.blocks[height_before + 1:]
         trades, state = [], state_before
         for block in new_blocks:
@@ -217,6 +228,7 @@ class World:
                 dropped_transactions=dropped.get(address, 0),
                 shocks=tuple(shock.kind for shock in todays),
             ))
+            self._log_decisions(member.agent, cluster.log)
 
     def _mine_closing_blocks(self, cluster: Cluster) -> None:
         """Agents with a daily mining limit mine early and act later, so without this nothing they do late gets mined.
@@ -248,6 +260,7 @@ class World:
         addresses = [member.keys.public_hex for member in self.members]
         dropped = self.reports[-1].dropped_by_sender if self.reports else {}
         names = {member.keys.public_hex: member.agent.name for member in self.members}
+        shown_names = {member.keys.public_hex: member.agent.shown_as for member in self.members}
         prices = average_prices(self.trades[-RECENT_TRADES:], self.state)
         schedule = cluster.sim.rng("schedule")
         for index, member in enumerate(self.members):
@@ -257,18 +270,24 @@ class World:
                                offer_ttl=config.offer_ttl, day=day, conditions=conditions, rivals=rivals, shocks=shocks,
                                dropped_yesterday=dropped.get(member.keys.public_hex, 0), names=names,
                                prices=prices, recent_trades=tuple(self.trades[-RECENT_TRADES:]),
-                               mine_limit=config.mine_limit)
+                               mine_limit=config.mine_limit, board=self.board,
+                               message_limit=config.message_limit, max_spend_bps=config.max_spend_bps,
+                               shown_names=shown_names)
             rng = cluster.sim.rng(f"agent:{member.agent.name}")
 
             def turn(tools=tools, agent=member.agent, rng=rng, log=cluster.log) -> None:
                 action = agent.decide(tools.view(), rng)
-                for decision in agent.drain_decisions():
-                    log.record(agent.name, "agent_decision", **decision)
+                self._log_decisions(agent, log)
                 if action is not None:
                     agent.after_action(action, tools.execute(action))
 
             for number in range(config.turns_per_day):
                 cluster.sim.schedule(number * config.turn_ms + schedule.randint(0, config.turn_jitter_ms), turn)
+
+    def _log_decisions(self, agent: ScriptedAgent, log) -> None:
+        for decision in agent.drain_decisions():
+            log.record(agent.name, "agent_decision", **decision)
+            self.board.mark_read(decision.get("messages_read", []))
 
     def _report(self, cluster: Cluster, result: SettleResult, day: int, height_before: int, state_before: State,
                 todays: list[Shock]) -> DayReport:
@@ -301,19 +320,21 @@ class World:
         memories = {member.agent.name: member.agent.memory_dict() for member in self.members
                     if member.agent.memory_dict() is not None}
         data = {"blocks": [block.to_dict() for block in self.blocks], "reports": [r.to_dict() for r in self.reports],
-                "shocks": [shock.to_dict() for shock in self.shocks], "memories": memories}
+                "shocks": [shock.to_dict() for shock in self.shocks], "memories": memories,
+                "messages": self.board.to_dict()}
         path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
 
     @classmethod
     def load(cls, path: Path, config: WorldConfig, members: list[Member], treasury: KeyPair | None = None,
-             ai_run: Any = None) -> World:
+             ai_run: Any = None, security: Any = None) -> World:
         """Restart from saved data. Creating a World replays the whole chain, so a damaged file can't go unnoticed."""
         data = json.loads(path.read_text(encoding="utf-8"))
         blocks = [Block.from_dict(block) for block in data["blocks"]]
         for member in members:
             if member.agent.name in data["memories"]:
                 member.agent.load_memory(data["memories"][member.agent.name])
-        return cls(config, members, treasury, blocks=blocks, ai_run=ai_run,
+        return cls(config, members, treasury, blocks=blocks, ai_run=ai_run, security=security,
+                   board=MessageBoard.from_dict(data["messages"]),
                    reports=[DayReport(**report) for report in data["reports"]],
                    shocks=[Shock(**shock) for shock in data["shocks"]])
 

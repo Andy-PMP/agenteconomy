@@ -123,6 +123,10 @@ class Node:
         return self._tip.state
 
     @property
+    def now(self) -> int:
+        return self._sim.now
+
+    @property
     def checkpoint_height(self) -> int:
         return self._checkpoint_height
 

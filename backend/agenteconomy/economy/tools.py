@@ -14,6 +14,7 @@ from ..chain.transaction import sign_accept, sign_offer, sign_reject
 from ..network.network import EventLog
 from ..network.node import Node
 from .market import FULL, Conditions, Trade, appraise
+from .messages import Message, MessageBoard, clean_text
 
 
 @dataclass(frozen=True)
@@ -49,7 +50,13 @@ class Reject:
     offer_id: str
 
 
-Action = Mine | MakeOffer | Counter | Accept | Reject
+@dataclass(frozen=True)
+class SendMessage:
+    to: str
+    text: str
+
+
+Action = Mine | MakeOffer | Counter | Accept | Reject | SendMessage
 
 
 @dataclass(frozen=True)
@@ -79,6 +86,8 @@ class View:
     prices: dict[str, int] = field(default_factory=dict)  # recent average coin price per species
     recent_trades: tuple[Trade, ...] = ()
     mines_left: int | None = None  # None: no daily limit
+    inbox: tuple[Message, ...] = ()  # untrusted, and newest unread only
+    unread_messages: int = 0
 
     def mine(self) -> list[Listing]:
         return [listing for listing in self.listings if listing.owner == self.me]
@@ -115,6 +124,7 @@ class ActionResult:
     code: str | None = None
     tx_id: str | None = None
     block: str | None = None
+    message: int | None = None
 
 
 class AgentTools:
@@ -124,7 +134,8 @@ class AgentTools:
                  action_limit: int, offer_ttl: int, day: int, conditions: Conditions, rivals: tuple[str, ...],
                  shocks: tuple[str, ...] = (), dropped_yesterday: int = 0, names: dict[str, str] | None = None,
                  prices: dict[str, int] | None = None, recent_trades: tuple[Trade, ...] = (),
-                 mine_limit: int | None = None):
+                 mine_limit: int | None = None, board: MessageBoard | None = None, message_limit: int = 3,
+                 max_spend_bps: int | None = None, shown_names: dict[str, str] | None = None):
         self.name = name
         self.address = keys.public_hex
         self._keys = keys
@@ -139,11 +150,16 @@ class AgentTools:
         self._rivals = rivals
         self._shocks = shocks
         self._dropped_yesterday = dropped_yesterday
-        self._names = names or {}
+        self._names = names or {}  # real names, for the log
+        self._shown_names = shown_names or self._names  # what the agent sees
         self._prices = prices or {}
         self._recent_trades = recent_trades
         self._mine_limit = mine_limit
         self._mines_used = 0
+        self._board = board
+        self._message_limit = message_limit
+        self._messages_sent = 0
+        self._max_spend_bps = max_spend_bps
         self.actions_used = 0
 
     def view(self) -> View:
@@ -169,10 +185,12 @@ class AgentTools:
             conditions=self._conditions,
             shocks=self._shocks,
             dropped_yesterday=self._dropped_yesterday,
-            names=dict(self._names),
+            names=dict(self._shown_names),
             prices=dict(self._prices),
             recent_trades=self._recent_trades,
             mines_left=None if self._mine_limit is None else max(0, self._mine_limit - self._mines_used),
+            inbox=self._board.inbox(self.address) if self._board else (),
+            unread_messages=len(self._board.unread_for(self.address)) if self._board else 0,
         )
 
     def execute(self, action: Action) -> ActionResult:
@@ -185,8 +203,37 @@ class AgentTools:
             except ChainError as e:
                 result = ActionResult(False, str(e.code))
         self._log.record(self.name, "agent_action", action=type(action).__name__, ok=result.ok, code=result.code,
-                         tx=result.tx_id, block=result.block)
+                         tx=result.tx_id, block=result.block, details=self._details(action, result))
         return result
+
+    def _details(self, action: Action, result: ActionResult) -> dict:
+        """What was asked for, so outcomes can be judged from this log alone. Message text stays on the board."""
+        match action:
+            case MakeOffer():
+                return self._terms(self._name_of(action.to), action)
+            case Counter():
+                original = self._node.state.offers.get(action.offer_id)
+                to = self._name_of(original.proposer) if original else None
+                return {"offer_id": action.offer_id, **self._terms(to, action)}
+            case Accept() | Reject():
+                original = self._node.state.offers.get(action.offer_id)
+                return {"offer_id": action.offer_id, "proposer": self._name_of(original.proposer) if original else None}
+            case SendMessage():
+                return {"to": self._name_of(action.to), "message": result.message}
+        return {}
+
+    def _terms(self, to: str | None, terms: MakeOffer | Counter) -> dict:
+        return {"to": to, "give_coins": terms.give_coins, "give_creatures": len(terms.give_creatures),
+                "want_coins": terms.want_coins, "want_creatures": len(terms.want_creatures)}
+
+    def _name_of(self, address: str) -> str:
+        return self._names.get(address, address[:8])
+
+    def _over_spend_limit(self, coins: int) -> bool:
+        """A fooled agent can only lose so much at once. Exactly the limit is allowed."""
+        if self._max_spend_bps is None:
+            return False
+        return coins * FULL > self._node.state.balance(self.address) * self._max_spend_bps
 
     def _dispatch(self, action: Action) -> ActionResult:
         match action:
@@ -198,16 +245,39 @@ class AgentTools:
                 block = self._node.mine(self.address, self._hash_budget)
                 return ActionResult(True, block=block.header.hash_hex if block else None)
             case MakeOffer():
+                if self._over_spend_limit(action.give_coins):
+                    return ActionResult(False, "spend_limit")
                 return self._make_offer(action.to, action, None)
             case Counter():
+                if self._over_spend_limit(action.give_coins):
+                    return ActionResult(False, "spend_limit")
                 return self._counter(action)
+            case SendMessage():
+                return self._send_message(action)
             case Accept():
+                original = self._node.state.offers.get(action.offer_id)
+                if original is not None and self._over_spend_limit(original.want_coins):
+                    return ActionResult(False, "spend_limit")
                 return self._submit(sign_accept(self._keys, self._node.params.chain_id, offer_id=action.offer_id,
                                                 nonce=self._next_nonce(), fee=self._fee))
             case Reject():
                 return self._submit(sign_reject(self._keys, self._node.params.chain_id, offer_id=action.offer_id,
                                                 nonce=self._next_nonce(), fee=self._fee))
         raise TypeError(f"not an action: {action!r}")
+
+    def _send_message(self, action: SendMessage) -> ActionResult:
+        if self._board is None:
+            return ActionResult(False, "messaging_off")
+        if self._messages_sent >= self._message_limit:
+            return ActionResult(False, "message_limit")
+        if action.to == self.address or action.to not in self._names:
+            return ActionResult(False, "bad_recipient")
+        if not clean_text(action.text, 1):
+            return ActionResult(False, "empty_message")
+        self._messages_sent += 1
+        message = self._board.post(day=self._day, time=self._node.now, sender=self.address, to=action.to,
+                                   text=action.text)
+        return ActionResult(True, message=message.id)
 
     def _counter(self, action: Counter) -> ActionResult:
         original = self._node.state.offers.get(action.offer_id)
